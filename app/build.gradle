@@ -2,12 +2,14 @@ plugins {
     id 'com.android.application'
 }
 
+
+
 android {
-    namespace 'com.example.myapplication'
+    namespace 'com.example.ProjectCC05'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.myapplication"
+        applicationId "com.example.ProjectCC05"
         minSdk 16
         targetSdk 33
         versionCode 1
