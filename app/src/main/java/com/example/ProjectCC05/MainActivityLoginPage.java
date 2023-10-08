@@ -43,7 +43,7 @@ public class MainActivityLoginPage extends AppCompatActivity {
 
     }
     public void openActivity2(){
-        Intent intent = new Intent(this, MainActivityMainPage.class);
+        Intent intent = new Intent(this, MainPage.class);
         startActivity(intent);
     }
 }
