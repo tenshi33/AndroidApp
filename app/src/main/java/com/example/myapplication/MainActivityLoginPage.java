@@ -45,3 +45,5 @@ public class MainActivityLoginPage extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+//Ang POGI ko
