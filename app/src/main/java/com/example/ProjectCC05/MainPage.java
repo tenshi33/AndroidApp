@@ -98,9 +98,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
         }
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_sort.setAdapter(adapter);
+        ArrayAdapter<CharSequence> arr = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
+        arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sort.setAdapter(arr);
         spin_sort.setOnItemSelectedListener(this);
 
 
@@ -161,6 +161,29 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 editPerson(position);
+            }
+        });
+
+        lv_listOfExpenses.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final int item = position;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure?");
+                builder.setMessage("Do you want to delete this item?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        myExpenses.delete(item);
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+                builder.setNegativeButton("NO", null);
+                builder.show();
+                return false;
             }
         });
 

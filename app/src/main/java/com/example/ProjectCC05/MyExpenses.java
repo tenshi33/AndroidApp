@@ -33,4 +33,8 @@ public class MyExpenses {
     public void setMyExpenseList(List<Expense> myExpenseList) {
         this.myExpenseList = myExpenseList;
     }
+
+    public void delete(int item) {
+        myExpenseList.remove(item);
+    }
 }

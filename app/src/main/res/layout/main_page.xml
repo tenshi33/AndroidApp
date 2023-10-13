@@ -99,21 +99,7 @@
 
         />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="73dp"
-        android:layout_height="42dp"
-        android:text="Total:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="673dp"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:gravity="center"
-        />
-
-    <Spinner
+ <Spinner
         android:id="@+id/spin_sort"
         android:layout_width="149dp"
         android:layout_height="27dp"
