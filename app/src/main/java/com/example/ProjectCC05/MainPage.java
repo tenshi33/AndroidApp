@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +19,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class MainPage extends AppCompatActivity {
+public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Button btn_add, btn_sortABC, btn_sortAMOUNT;
+    Spinner spin_sort;
 
     ListView lv_listOfExpenses;
 
@@ -35,8 +39,11 @@ public class MainPage extends AppCompatActivity {
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
 
         btn_add = findViewById(R.id.btn_add);
+        spin_sort = findViewById(R.id.spin_sort);
+        /*
         btn_sortABC = findViewById(R.id.btn_sortABC);
         btn_sortAMOUNT = findViewById(R.id.btn_sortAMOUNT);
+         */
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
 
         adapter = new ExpenseAdapter(MainPage.this, myExpenses);
@@ -54,9 +61,10 @@ public class MainPage extends AppCompatActivity {
                 int amount = Integer.parseInt(incomingMessages.getString("age"));
                 int pictureNumber = Integer.parseInt(incomingMessages.getString("picturenumber"));
                 int positionEdited = incomingMessages.getInt("edit");
+                String date = incomingMessages.getString("date");
 
                 // create new person object
-                Expense e = new Expense(expenseName, amount, pictureNumber);
+                Expense e = new Expense(expenseName, amount, pictureNumber, date);
 
                 // add person to the list and update adapter
                 if (positionEdited > -1) {
@@ -90,6 +98,11 @@ public class MainPage extends AppCompatActivity {
 
         }
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sort.setAdapter(adapter);
+        spin_sort.setOnItemSelectedListener(this);
+
 
         btn_add.setOnClickListener(new View.OnClickListener() {
             /*
@@ -113,15 +126,17 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
+
+        /*
         btn_sortAMOUNT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Collections.sort(myExpenses.getMyFriendsList(), new Comparator<Expense>() {
                     @Override
                     public int compare(Expense p1, Expense p2) {
-                        /*
+
                             Sort by amount, lowest to highest
-                         */
+
                         return p1.getAmount() - p2.getAmount();
                     }
                 });
@@ -136,6 +151,8 @@ public class MainPage extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+         */
+
 
         /*
             For editing the items when tapped
@@ -158,6 +175,7 @@ public class MainPage extends AppCompatActivity {
         i.putExtra("edit", position);
         i.putExtra("name", p.getExpenseName());
         i.putExtra("age", p.getAmount());
+        i.putExtra("date", p.getDate());
         i.putExtra("picturenumber", p.getPictureNumber());
 
         startActivity(i);
@@ -165,4 +183,37 @@ public class MainPage extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        if (spin_sort.getSelectedItem().toString().equals("Alphabet")) {
+            Toast.makeText(MainPage.this, "Sort by Alphabet", Toast.LENGTH_SHORT).show();
+            Collections.sort(myExpenses.getMyFriendsList());
+            adapter.notifyDataSetChanged();
+        }
+        if (spin_sort.getSelectedItem().toString().equals("Amount")) {
+            Toast.makeText(MainPage.this, "Sort by Amount", Toast.LENGTH_SHORT).show();
+            Collections.sort(myExpenses.getMyFriendsList(), new Comparator<Expense>() {
+                @Override
+                public int compare(Expense e1, Expense e2) {
+                    return e1.getAmount() - e2.getAmount();
+                }
+            });
+            adapter.notifyDataSetChanged();
+        }
+        if (spin_sort.getSelectedItem().toString().equals("Date")) {
+            Toast.makeText(MainPage.this, "Sort by Date", Toast.LENGTH_SHORT).show();
+            Collections.sort(myExpenses.getMyFriendsList(), new Comparator<Expense>() {
+                @Override
+                public int compare(Expense d1, Expense d2) {
+                    return d1.getDate().compareTo(d2.getDate());
+                }
+            });
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

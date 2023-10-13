@@ -16,9 +16,6 @@
         <activity android:name=".MainPage"/>
         <activity android:name=".NewTrackerForm"/>
         <activity
-            android:name=".MainActivityMainPage"
-            android:exported="false" />
-        <activity
             android:name=".MainActivityLoginPage"
             android:exported="true">
             <intent-filter>

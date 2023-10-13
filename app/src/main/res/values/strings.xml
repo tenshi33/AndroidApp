@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ProjectCC05</string>
+    <string-array name="sort">
+        <item>Alphabet</item>
+        <item>Amount</item>
+        <item>Date</item>
+    </string-array>
 </resources>

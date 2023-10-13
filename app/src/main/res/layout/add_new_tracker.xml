@@ -36,4 +36,12 @@
         android:hint="Icon Number: "
         android:inputType="text" />
 
+    <EditText
+        android:id="@+id/et_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Date:"
+        android:inputType="text" />
+
 </LinearLayout>

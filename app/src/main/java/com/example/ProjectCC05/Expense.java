@@ -7,11 +7,15 @@ public class Expense implements Comparable<Expense> {
     private String expenseName;
     private int amount;
     private int pictureNumber;
+    private String date;
 
-    public Expense(String expenseName, int amount, int pictureNumber) {
+
+
+    public Expense(String expenseName, int amount, int pictureNumber, String date) {
         this.expenseName = expenseName;
         this.amount = amount;
         this.pictureNumber = pictureNumber;
+        this.date = date;
 
     }
 
@@ -45,6 +49,13 @@ public class Expense implements Comparable<Expense> {
 
     public void setPictureNumber(int pictureNumber) {
         this.pictureNumber = pictureNumber;
+    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }

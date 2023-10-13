@@ -49,11 +49,13 @@ public class ExpenseAdapter extends BaseAdapter {
         TextView tv_expenseName = oneExpenseLine.findViewById(R.id.tv_expensename);
         TextView tv_amount = oneExpenseLine.findViewById(R.id.tv_amountvalue);
         ImageView iv_icon = oneExpenseLine.findViewById(R.id.iv_tracker_icon);
+        TextView tv_date = oneExpenseLine.findViewById(R.id.tv_date);
 
         Expense p = this.getItem(position);
 
         tv_expenseName.setText(p.getExpenseName());
         tv_amount.setText(Integer.toString(p.getAmount()));
+        tv_date.setText(p.getDate());
 
         int icon_resource_numbers [] = {
                 R.drawable.car_loan_icon, //1
