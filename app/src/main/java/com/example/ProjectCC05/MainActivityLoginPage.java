@@ -22,34 +22,17 @@ public class MainActivityLoginPage extends AppCompatActivity {
         setContentView(R.layout.activity_main_loginpage);
 
         button = (Button) findViewById(R.id.loginbtn);
-
-        TextView username =(TextView) findViewById(R.id.username);
-        TextView password =(TextView) findViewById(R.id.password);
-
-        Button loginbtn = (Button) findViewById(R.id.loginbtn);
-
-        loginbtn.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().equals("admin") && password.getText().toString().equals("1234")) {
-                    Toast.makeText(MainActivityLoginPage.this, "LOGIN SUCCESSFUL",Toast.LENGTH_SHORT).show();
-                    openActivity2();
-                }else
-                    Toast.makeText(MainActivityLoginPage.this, "LOGIN FAILED",Toast.LENGTH_SHORT).show();
+                openSignInPage();
+
             }
         });
 
-
-
     }
-    public void openActivity2(){
-        Intent intent = new Intent(this, MainPage.class);
+    public void openSignInPage(){
+        Intent intent = new Intent(this, Sign_In_Page.class);
         startActivity(intent);
     }
 }
-
-//Ang POGI ni angelo
-
-/*
-    Toledo Test Commit
- */
