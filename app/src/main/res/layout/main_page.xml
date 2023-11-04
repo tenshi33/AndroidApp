@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainPage"
-    android:background="@drawable/background"
+    android:background="@drawable/tracker"
     >
 
    <!--
@@ -57,57 +57,54 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/tv_sortby"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="108dp"
-        android:text="Sort By:"
-        app:layout_constraintBottom_toTopOf="@+id/btn_sortABC"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:layout_constraintVertical_bias="0.777" />
+ <TextView
+     android:id="@+id/tv_sortby"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="20dp"
+     android:layout_marginLeft="20dp"
+     android:layout_marginTop="172dp"
+     android:text="Sort By:"
+     app:layout_constraintBottom_toTopOf="@+id/btn_sortABC"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/tv_title"
+     app:layout_constraintVertical_bias="0.777" />
 
-    <Button
-        android:id="@+id/btn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:backgroundTint="@color/white"
-        android:onClick="addReminder"
-        android:text="ADD"
-        android:textColor="@color/black"
+ <Button
+     android:id="@+id/btn_add"
+     android:layout_width="60dp"
+     android:layout_height="60dp"
+     android:backgroundTint="#55ACEE"
+     android:onClick="addReminder"
+     android:text="+"
+     android:textColor="@color/white"
+     android:textSize="17dp"
+     android:textStyle="bold"
+     tools:layout_editor_absoluteX="308dp"
+     tools:layout_editor_absoluteY="308dp" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+ <ListView
+     android:id="@+id/lv_listOfExpenses"
+     android:layout_width="377dp"
+     android:layout_height="265dp"
 
-    <ListView
-        android:id="@+id/lv_listOfExpenses"
-        android:layout_width="370dp"
-        android:layout_height="300dp"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.588"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.827"
-
-        />
+     app:layout_constraintVertical_bias="0.798" />
 
  <Spinner
-        android:id="@+id/spin_sort"
-        android:layout_width="149dp"
-        android:layout_height="27dp"
-        app:layout_constraintBottom_toTopOf="@+id/lv_listOfExpenses"
-        app:layout_constraintEnd_toStartOf="@+id/btn_add"
-        app:layout_constraintHorizontal_bias="0.158"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sortby"
-        app:layout_constraintVertical_bias="0.232" />
+     android:id="@+id/spin_sort"
+     android:layout_width="149dp"
+     android:layout_height="27dp"
+     app:layout_constraintBottom_toTopOf="@+id/lv_listOfExpenses"
+     app:layout_constraintEnd_toStartOf="@+id/btn_add"
+     app:layout_constraintHorizontal_bias="0.125"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/tv_sortby"
+     app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
