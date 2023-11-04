@@ -2,7 +2,7 @@ package com.example.ProjectCC05;
 
 import androidx.annotation.NonNull;
 
-public class Expense implements Comparable<Expense> {
+public class Expense extends Expense2 implements Comparable<Expense> {
 
     private String expenseName;
     private int amount;
@@ -12,6 +12,7 @@ public class Expense implements Comparable<Expense> {
 
 
     public Expense(String expenseName, int amount, int pictureNumber, String date) {
+        super(expenseName, amount, date);
         this.expenseName = expenseName;
         this.amount = amount;
         this.pictureNumber = pictureNumber;

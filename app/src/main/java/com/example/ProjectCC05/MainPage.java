@@ -21,14 +21,16 @@ import java.util.Comparator;
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button btn_add, btn_sortABC, btn_sortAMOUNT;
+    Button btn_add, btn_history;
     Spinner spin_sort;
 
     ListView lv_listOfExpenses;
 
     ExpenseAdapter adapter;
+    ExpenseAdapter2 adapter2;
 
     MyExpenses myExpenses;
+    MyExpenses2 myExpense2;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,16 +39,16 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         setContentView(R.layout.main_page);
 
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
+        myExpense2 = ((MyApplication) this.getApplication()).getMyExpenses2();
 
         btn_add = findViewById(R.id.btn_add);
+        btn_history = findViewById(R.id.btn_history);
         spin_sort = findViewById(R.id.spin_sort);
-        /*
-        btn_sortABC = findViewById(R.id.btn_sortABC);
-        btn_sortAMOUNT = findViewById(R.id.btn_sortAMOUNT);
-         */
+
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
 
         adapter = new ExpenseAdapter(MainPage.this, myExpenses);
+        adapter2 = new ExpenseAdapter2(MainPage.this, myExpense2);
 
         lv_listOfExpenses.setAdapter(adapter);
 
@@ -98,6 +100,14 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
         }
 
+        btn_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(view.getContext(), HistoryPage.class);
+                startActivity(i);
+            }
+        });
+
         ArrayAdapter<CharSequence> arr = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_sort.setAdapter(arr);
@@ -112,46 +122,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), NewTrackerForm.class);
-                /*
-                    The two parameters of the Intent i are 1. Context, and 2. Destination
-                    View view is the button btn_add is where it comes from, while
-                    NewPersonForm is the java code is where it goes to
-                    2 types of intent: Explicit Intent and Implicit Intent
-                    This is an explicit intent where we specify directly the destination
-                    of the activity. Implicit is where the user will decide where to go
-                    like "send a phone call" will open a dialer or "open maps" will likely open
-                    google maps but there could be another map app
-                 */
                 startActivity(i);
             }
         });
-
-
-        /*
-        btn_sortAMOUNT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Collections.sort(myExpenses.getMyFriendsList(), new Comparator<Expense>() {
-                    @Override
-                    public int compare(Expense p1, Expense p2) {
-
-                            Sort by amount, lowest to highest
-
-                        return p1.getAmount() - p2.getAmount();
-                    }
-                });
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        btn_sortABC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Collections.sort(myExpenses.getMyFriendsList());
-                adapter.notifyDataSetChanged();
-            }
-        });
-         */
 
 
         /*
@@ -176,14 +149,17 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        myExpenses.delete(item);
+                        Object selectedItem = lv_listOfExpenses.getItemAtPosition(position);
+                        myExpenses.getMyFriendsList().remove(selectedItem);
+                        myExpense2.getMyFriendsList().add((Expense2) selectedItem);
                         adapter.notifyDataSetChanged();
+                        adapter2.notifyDataSetChanged();
 
                     }
                 });
                 builder.setNegativeButton("NO", null);
                 builder.show();
-                return false;
+                return true;
             }
         });
 
