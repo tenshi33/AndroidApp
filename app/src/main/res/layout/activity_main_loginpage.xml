@@ -11,8 +11,10 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:src="@drawable/design"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="54dp" />
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="313dp"
