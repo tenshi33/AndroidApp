@@ -24,7 +24,7 @@ import java.util.Date;
 public class NewTrackerForm extends AppCompatActivity {
 
     Button btn_ok, btn_cancel;
-    EditText et_expensename, et_amount, et_picturenumber, et_date;
+    EditText et_expensename, et_amount, /*et_picturenumber, */et_date;
     DatePickerDialog.OnDateSetListener mDateSetListener;
 
     int positionToEdit = -1;
@@ -38,7 +38,7 @@ public class NewTrackerForm extends AppCompatActivity {
         btn_cancel = findViewById(R.id.btn_cancel);
         et_amount = findViewById(R.id.et_amount);
         et_expensename = findViewById(R.id.et_expensename);
-        et_picturenumber = findViewById(R.id.et_picturenumber);
+        // et_picturenumber = findViewById(R.id.et_picturenumber);
         et_date = findViewById(R.id.et_date);
 
         et_date.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class NewTrackerForm extends AppCompatActivity {
         if (incomingIntent != null) {
             String expenseName = incomingIntent.getString("name");
             int amount = incomingIntent.getInt("age");
-            int pictureNumber = incomingIntent.getInt("picturenumber");
+            // int pictureNumber = incomingIntent.getInt("picturenumber");
             String date = incomingIntent.getString("date");
             positionToEdit = incomingIntent.getInt("edit");
 
@@ -86,7 +86,7 @@ public class NewTrackerForm extends AppCompatActivity {
             et_expensename.setText(expenseName);
             et_date.setText(date);
             et_amount.setText(Integer.toString( amount));
-            et_picturenumber.setText(Integer.toString(pictureNumber));
+            // et_picturenumber.setText(Integer.toString(pictureNumber));
 
 
 
@@ -99,7 +99,7 @@ public class NewTrackerForm extends AppCompatActivity {
                 // get strings from et_ view objects
                 String newName = et_expensename.getText().toString();
                 String newAge = et_amount.getText().toString();
-                String newPictureNumber = et_picturenumber.getText().toString();
+                // String newPictureNumber = et_picturenumber.getText().toString();
                 String newDate = et_date.getText().toString();
 
 
@@ -110,7 +110,7 @@ public class NewTrackerForm extends AppCompatActivity {
                 i.putExtra("name", newName);
                 i.putExtra("age", newAge);
                 i.putExtra("date", newDate);
-                i.putExtra("picturenumber", newPictureNumber);
+                // i.putExtra("picturenumber", newPictureNumber);
 
                 // start main Activity again
                 startActivity(i);

@@ -20,13 +20,13 @@ public class MyExpenses {
 
         Random rand = new Random();
         for (int i = 0; i<startingExpenses.length; i++){
-            Expense p = new Expense(startingExpenses[i], rand.nextInt(1500) + 100, rand.nextInt(50), startingDate[i]);
+            Expense p = new Expense(startingExpenses[i], rand.nextInt(1500) + 100, /*rand.nextInt(50), */startingDate[i]);
             myExpenseList.add(p);
         }
 
     }
 
-    public List<Expense> getMyFriendsList() {
+    public List<Expense> getMyExpenseList() {
         return myExpenseList;
     }
 

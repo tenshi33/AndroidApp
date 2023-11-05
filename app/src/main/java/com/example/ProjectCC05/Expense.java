@@ -6,16 +6,16 @@ public class Expense extends Expense2 implements Comparable<Expense> {
 
     private String expenseName;
     private int amount;
-    private int pictureNumber;
+    // private int pictureNumber;
     private String date;
 
 
 
-    public Expense(String expenseName, int amount, int pictureNumber, String date) {
+    public Expense(String expenseName, int amount/*, int pictureNumber*/, String date) {
         super(expenseName, amount, date);
         this.expenseName = expenseName;
         this.amount = amount;
-        this.pictureNumber = pictureNumber;
+        // this.pictureNumber = pictureNumber;
         this.date = date;
 
     }
@@ -43,7 +43,7 @@ public class Expense extends Expense2 implements Comparable<Expense> {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-
+    /*
     public int getPictureNumber() {
         return pictureNumber;
     }
@@ -51,6 +51,7 @@ public class Expense extends Expense2 implements Comparable<Expense> {
     public void setPictureNumber(int pictureNumber) {
         this.pictureNumber = pictureNumber;
     }
+    */
     public String getDate() {
         return date;
     }

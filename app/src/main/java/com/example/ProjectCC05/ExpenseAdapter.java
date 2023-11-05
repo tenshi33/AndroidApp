@@ -22,12 +22,12 @@ public class ExpenseAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return myExpenses.getMyFriendsList().size();
+        return myExpenses.getMyExpenseList().size();
     }
 
     @Override
     public Expense getItem(int position) {
-        return myExpenses.getMyFriendsList().get(position);
+        return myExpenses.getMyExpenseList().get(position);
 
     }
 
@@ -48,7 +48,7 @@ public class ExpenseAdapter extends BaseAdapter {
 
         TextView tv_expenseName = oneExpenseLine.findViewById(R.id.tv_expensename);
         TextView tv_amount = oneExpenseLine.findViewById(R.id.tv_amountvalue);
-        ImageView iv_icon = oneExpenseLine.findViewById(R.id.iv_tracker_icon);
+        // ImageView iv_icon = oneExpenseLine.findViewById(R.id.iv_tracker_icon);
         TextView tv_date = oneExpenseLine.findViewById(R.id.tv_date);
 
         Expense p = this.getItem(position);
@@ -57,6 +57,7 @@ public class ExpenseAdapter extends BaseAdapter {
         tv_amount.setText(Integer.toString(p.getAmount()));
         tv_date.setText(p.getDate());
 
+        /*
         int icon_resource_numbers [] = {
                 R.drawable.car_loan_icon, //1
                 R.drawable.debt_icon, // 2
@@ -67,7 +68,7 @@ public class ExpenseAdapter extends BaseAdapter {
                 R.drawable.water_icon // 7
         };
         iv_icon.setImageResource(icon_resource_numbers[position]);
-
+        */
         return oneExpenseLine;
     }
 }

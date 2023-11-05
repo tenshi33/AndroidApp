@@ -9,11 +9,12 @@
         android:id="@+id/tv_expensename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="Expense Tracked"
-        app:layout_constraintStart_toEndOf="@+id/iv_tracker_icon"
+
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -38,6 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.131" />
 
+    <!--
     <ImageView
         android:id="@+id/iv_tracker_icon"
         android:layout_width="66dp"
@@ -49,18 +51,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/water_icon" />
 
+    -->
+
     <TextView
         android:id="@+id/tv_amountlabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
         android:text="Amount:"
-        app:layout_constraintEnd_toStartOf="@+id/tv_amountvalue"
-        app:layout_constraintStart_toEndOf="@+id/iv_tracker_icon"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_expensename" />
 
     <TextView

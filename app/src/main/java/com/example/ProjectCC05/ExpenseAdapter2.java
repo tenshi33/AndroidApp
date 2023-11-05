@@ -21,12 +21,12 @@ public class ExpenseAdapter2 extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return myExpenses2.getMyFriendsList().size();
+        return myExpenses2.getMyExpenseList2().size();
     }
 
     @Override
     public Expense2 getItem(int position) {
-        return myExpenses2.getMyFriendsList().get(position);
+        return myExpenses2.getMyExpenseList2().get(position);
 
     }
 

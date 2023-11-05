@@ -26,7 +26,7 @@ public class MyExpenses2{
 
     }
 
-    public List<Expense2> getMyFriendsList() {
+    public List<Expense2> getMyExpenseList2() {
         return myExpenseList2;
     }
 

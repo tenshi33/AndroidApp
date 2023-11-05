@@ -6,7 +6,7 @@ public class Expense2 {
 
     private String expenseName;
     private int amount;
-    private int pictureNumber2;
+    //private int pictureNumber2;
 
     public String getDate() {
         return date;
@@ -44,7 +44,7 @@ public class Expense2 {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-
+    /*
     public int getPictureNumber() {
         return pictureNumber2;
     }
@@ -52,8 +52,7 @@ public class Expense2 {
     public void setPictureNumber(int pictureNumber2) {
         this.pictureNumber2 = pictureNumber2;
     }
-
-
+    */
 
     public void setDate(String date) {
         this.date = date;
