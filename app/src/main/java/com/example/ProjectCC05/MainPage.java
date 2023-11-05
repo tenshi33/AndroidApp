@@ -11,17 +11,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
+    TextView totalTextView;
     ImageButton btn_history, homebtn;
     Button btn_add;
     Spinner spin_sort;
@@ -39,6 +41,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+
+
 
         homebtn = (ImageButton) findViewById(R.id.homebtn);
         homebtn.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +177,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
+
     }
+
 
     public void editPerson(int position) {
         Intent i = new Intent(getApplicationContext(), NewTrackerForm.class);
