@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,7 +22,8 @@ import java.util.Comparator;
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button btn_add, btn_history;
+    ImageButton btn_history, homebtn;
+    Button btn_add;
     Spinner spin_sort;
 
     ListView lv_listOfExpenses;
@@ -37,6 +39,14 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
+
+        homebtn = (ImageButton) findViewById(R.id.homebtn);
+        homebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainPage();
+            }
+        });
 
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
         myExpense2 = ((MyApplication) this.getApplication()).getMyExpenses2();
@@ -214,5 +224,10 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void openMainPage(){
+        Intent intent = new Intent(this, MainPage.class);
+        startActivity(intent);
     }
 }

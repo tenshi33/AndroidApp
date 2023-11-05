@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectCC05</string>
+    <string name="app_name">Student Expenses App</string>
     <string-array name="sort">
         <item>Alphabet</item>
         <item>Amount</item>

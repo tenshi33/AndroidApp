@@ -39,83 +39,113 @@
 
         -->
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="379dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:gravity="center_horizontal"
-        android:text="My Expenses"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-        android:textStyle="bold"
+
+ <TextView
+     android:id="@+id/tv_title"
+     android:layout_width="379dp"
+     android:layout_height="wrap_content"
+     android:gravity="center_horizontal"
+     android:text="Expenses"
+     android:textAlignment="center"
+     android:textColor="@color/white"
+     android:textSize="35dp"
 
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+     android:textStyle="bold"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.562"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.15" />
 
  <TextView
      android:id="@+id/tv_sortby"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:layout_marginStart="20dp"
-     android:layout_marginLeft="20dp"
-     android:layout_marginTop="172dp"
+     android:layout_marginTop="160dp"
      android:text="Sort By:"
-     app:layout_constraintBottom_toTopOf="@+id/btn_sortABC"
+     android:textColor="@color/black"
+     app:layout_constraintBottom_toTopOf="@+id/spin_sort"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.049"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/tv_title"
-     app:layout_constraintVertical_bias="0.777" />
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="1.0" />
 
  <Button
      android:id="@+id/btn_add"
-     android:layout_width="60dp"
-     android:layout_height="60dp"
-     android:backgroundTint="#55ACEE"
+     android:layout_width="80dp"
+     android:layout_height="80dp"
+     android:backgroundTint="@color/white"
      android:onClick="addReminder"
      android:text="+"
-     android:textColor="@color/white"
-     android:textSize="17dp"
+     android:textColor="#55ACEE"
+     android:textSize="40dp"
      android:textStyle="bold"
-     tools:layout_editor_absoluteX="308dp"
-     tools:layout_editor_absoluteY="308dp" />
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.498"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.327" />
 
  <ListView
      android:id="@+id/lv_listOfExpenses"
      android:layout_width="377dp"
      android:layout_height="265dp"
-
+     android:cacheColorHint="@color/black"
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.588"
+     app:layout_constraintHorizontal_bias="0.47"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toTopOf="parent"
-
-     app:layout_constraintVertical_bias="0.798" />
+     app:layout_constraintTop_toBottomOf="@+id/spin_sort"
+     app:layout_constraintVertical_bias="0.0" />
 
  <Spinner
      android:id="@+id/spin_sort"
-     android:layout_width="149dp"
+     android:layout_width="138dp"
      android:layout_height="27dp"
-     app:layout_constraintBottom_toTopOf="@+id/lv_listOfExpenses"
-     app:layout_constraintEnd_toStartOf="@+id/btn_add"
-     app:layout_constraintHorizontal_bias="0.125"
+     android:autofillHints="Sort by"
+     android:outlineAmbientShadowColor="@color/black"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.058"
      app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/tv_sortby"
-     app:layout_constraintVertical_bias="1.0" />
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.465" />
 
- <Button
+
+ <ImageButton
+     android:id="@+id/homebtn"
+     android:layout_width="70dp"
+     android:layout_height="70dp"
+     android:layout_alignParentTop="true"
+     android:layout_alignParentRight="true"
+     android:backgroundTint="#55ACEE"
+     android:src="@drawable/baseline_home_24"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.498"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.96" />
+
+ <ImageButton
      android:id="@+id/btn_history"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:layout_marginEnd="8dp"
-     android:layout_marginRight="8dp"
-     android:text="History"
-     app:layout_constraintEnd_toStartOf="@+id/btn_add"
-     app:layout_constraintStart_toEndOf="@+id/spin_sort"
-     tools:layout_editor_absoluteY="308dp" />
+     android:layout_width="70dp"
+     android:layout_height="70dp"
+     android:layout_alignParentTop="true"
+     android:layout_alignParentRight="true"
+     android:backgroundTint="#55ACEE"
+     android:src="@drawable/baseline_history_24"
+
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.809"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintVertical_bias="0.96" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

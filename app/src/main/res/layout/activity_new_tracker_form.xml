@@ -22,7 +22,6 @@
         layout="@layout/add_new_tracker"
         android:layout_width="335dp"
         android:layout_height="192dp"
-
         android:layout_marginTop="340dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
