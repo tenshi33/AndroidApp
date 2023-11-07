@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Student Expenses App</string>
     <string-array name="sort">
-        <item>Alphabet</item>
-        <item>Amount</item>
+        <item>A-Z</item>
+        <item>Low to High</item>
         <item>Date</item>
     </string-array>
 </resources>

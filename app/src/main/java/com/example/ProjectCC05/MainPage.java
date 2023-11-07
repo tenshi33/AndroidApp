@@ -248,12 +248,12 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        if (spin_sort.getSelectedItem().toString().equals("Alphabet")) {
+        if (spin_sort.getSelectedItem().toString().equals("A-Z")) {
             Toast.makeText(MainPage.this, "Sort by Alphabet", Toast.LENGTH_SHORT).show();
             Collections.sort(myExpenses.getMyExpenseList());
             adapter.notifyDataSetChanged();
         }
-        if (spin_sort.getSelectedItem().toString().equals("Amount")) {
+        if (spin_sort.getSelectedItem().toString().equals("Low to High")) {
             Toast.makeText(MainPage.this, "Sort by Amount", Toast.LENGTH_SHORT).show();
             Collections.sort(myExpenses.getMyExpenseList(), new Comparator<Expense>() {
                 @Override
@@ -302,7 +302,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
         builder.setCancelable(true);
         builder.setTitle("Log Out");
-        builder.setMessage("Do you want to log out?");
+        builder.setMessage("Do you want to Log Out?");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override

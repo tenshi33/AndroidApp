@@ -35,4 +35,11 @@ public class LoginPage extends AppCompatActivity {
         Intent intent = new Intent(this,MainPage.class);
         startActivity(intent);
     }
+    public void onBackPressed(){
+        openMainActivity();
+
+    }
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivityLoginPage.class);
+    }
 }
