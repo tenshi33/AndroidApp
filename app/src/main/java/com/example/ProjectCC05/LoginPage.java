@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class LoginPage extends AppCompatActivity {
 
     private Button button;
-
+//ang panget ko
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
