@@ -1,8 +1,14 @@
 package com.example.ProjectCC05;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,13 +23,16 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    TextView totalTextView;
+    TextView tv_totalAmount;
     ImageButton btn_history, homebtn;
     Button btn_add;
     Spinner spin_sort;
@@ -42,7 +51,11 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("expense_channel_id", "Expense Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         homebtn = (ImageButton) findViewById(R.id.homebtn);
         homebtn.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +71,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
         spin_sort = findViewById(R.id.spin_sort);
-
+        tv_totalAmount = findViewById(R.id.tv_totalAmount);
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
 
         adapter = new ExpenseAdapter(MainPage.this, myExpenses);
@@ -72,15 +85,43 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         // capture incoming data
         if (incomingMessages != null) {
 
-            try {
+            //try {
                 String expenseName = incomingMessages.getString("name");
-                int amount = Integer.parseInt(incomingMessages.getString("age"));
+                float amount = Float.parseFloat(incomingMessages.getString("age"));
                 // int pictureNumber = Integer.parseInt(incomingMessages.getString("picturenumber"));
                 int positionEdited = incomingMessages.getInt("edit");
-                String date = incomingMessages.getString("date");
+                String dateString = incomingMessages.getString("date");
+
+
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                try {
+                    Date dueDate = sdf.parse(dateString);
+                    long dueDateMillis = dueDate.getTime();
+
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    Intent intent = new Intent (this, NotificationReceiver.class);
+
+                    intent.putExtra("dueDateMillis", dateString);
+
+                    int flags;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        flags = PendingIntent.FLAG_IMMUTABLE;
+                    }
+                    else {
+                        flags = 0;
+                    }
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, flags);
+                    alarmManager.set(AlarmManager.RTC, dueDateMillis, pendingIntent);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
 
                 // create new person object
-                Expense e = new Expense(expenseName, amount, /*pictureNumber,*/ date);
+                Expense e = new Expense(expenseName, amount, /*pictureNumber,*/ dateString);
 
                 // add person to the list and update adapter
                 if (positionEdited > -1) {
@@ -88,11 +129,11 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 }
                 myExpenses.getMyExpenseList().add(e);
                 adapter.notifyDataSetChanged();
-
+            /*
             } catch(Exception e) {
                 /*
                     To show error when Input Mismatch Error occurred
-                 */
+                 /
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
                 builder.setCancelable(false);
                 builder.setTitle("You have encountered an error!");
@@ -103,7 +144,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     public void onClick(DialogInterface dialogInterface, int i) {
                         /*
                             To go back to the New Expense Form activity after pressing try again
-                         */
+                         /
                         Intent tryAgain = new Intent(getApplicationContext(), NewTrackerForm.class);
                         startActivity(tryAgain);
                     }
@@ -111,8 +152,10 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 builder.show();
 
             }
-
+            */
         }
+
+
 
         btn_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,10 +172,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
 
         btn_add.setOnClickListener(new View.OnClickListener() {
-            /*
-                Intent: the .setOnClickListener is for the pop up of another xml page
-                after clicking or pressing the button
-             */
+
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), NewTrackerForm.class);
@@ -151,6 +191,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
+
+        // Deleting an Item and then transferring it to the history listview
         lv_listOfExpenses.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -177,9 +219,16 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
+        // Calculates the total of the expenses then displays it to the tv_totalAmount
+        float totalAmount = 0;
+        for (Expense item : myExpenses.myExpenseList) {
+            totalAmount += item.getAmount();
+        }
+
+        tv_totalAmount.setText(String.valueOf(totalAmount));
+
 
     }
-
 
     public void editPerson(int position) {
         Intent i = new Intent(getApplicationContext(), NewTrackerForm.class);
@@ -210,7 +259,19 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             Collections.sort(myExpenses.getMyExpenseList(), new Comparator<Expense>() {
                 @Override
                 public int compare(Expense e1, Expense e2) {
-                    return e1.getAmount() - e2.getAmount();
+                    float expense1 = e1.getAmount();
+                    float expense2 = e2.getAmount();
+
+                    if (expense1 < expense2) {
+                        return -1; // e1 < e2
+                    }
+                    else if (expense1 > expense2) {
+                        return 1; // e1 > e2
+                    }
+                    else {
+                        return 0; // e1 = e2
+                    }
+                    //return e1.getAmount() - e2.getAmount();
                 }
             });
             adapter.notifyDataSetChanged();
@@ -236,4 +297,23 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         Intent intent = new Intent(this, MainPage.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
+        builder.setCancelable(true);
+        builder.setTitle("Log Out");
+        builder.setMessage("Do you want to log out?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent logOut = new Intent(getApplicationContext(), LoginPage.class);
+                startActivity(logOut);
+            }
+        });
+        builder.show();
+        //super.onBackPressed();
+    }
 }
+

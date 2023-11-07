@@ -8,38 +8,6 @@
     android:background="@drawable/tracker"
     >
 
-   <!--
-
-    <Button
-        android:id="@+id/btn_sortAMOUNT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:backgroundTint="@color/white"
-        android:text="Amount"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/btn_add"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toEndOf="@+id/btn_sortABC"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <Button
-        android:id="@+id/btn_sortABC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="140dp"
-        android:backgroundTint="@color/white"
-        android:text="Alphabetical"
-        android:textColor="@color/black"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-        -->
-
-
  <TextView
      android:id="@+id/tv_title"
      android:layout_width="379dp"
@@ -56,12 +24,12 @@
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintVertical_bias="0.15" />
+
  <TextView
-     android:id="@+id/totalTextView"
+     android:id="@+id/tv_totalAmount"
      android:layout_width="216dp"
      android:layout_height="43dp"
      android:gravity="center_horizontal"
-     android:text="1,000,000,000"
      android:textAlignment="center"
      android:textColor="@color/white"
      android:textSize="35dp"
@@ -84,8 +52,8 @@
      android:textSize="35dp"
      android:textStyle="bold"
      app:layout_constraintBottom_toBottomOf="parent"
-     app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintHorizontal_bias="0.152"
+     app:layout_constraintEnd_toStartOf="@+id/tv_totalAmount"
+     app:layout_constraintHorizontal_bias="0.828"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintVertical_bias="0.26" />

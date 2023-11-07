@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 public class ExpenseAdapter2 extends BaseAdapter {
 
+    // History
     Activity mActivity;
     MyExpenses2 myExpenses2;
 
@@ -55,7 +56,7 @@ public class ExpenseAdapter2 extends BaseAdapter {
         Expense2 p = this.getItem(position);
 
         tv_expenseName.setText(p.getExpenseName());
-        tv_amount.setText(Integer.toString(p.getAmount()));
+        tv_amount.setText(Integer.toString((int) p.getAmount()));
         tv_date.setText(p.getDate());
 
         /*

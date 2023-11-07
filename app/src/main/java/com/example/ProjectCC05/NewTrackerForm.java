@@ -77,7 +77,7 @@ public class NewTrackerForm extends AppCompatActivity {
 
         if (incomingIntent != null) {
             String expenseName = incomingIntent.getString("name");
-            int amount = incomingIntent.getInt("age");
+            float amount = incomingIntent.getInt("age");
             // int pictureNumber = incomingIntent.getInt("picturenumber");
             String date = incomingIntent.getString("date");
             positionToEdit = incomingIntent.getInt("edit");
@@ -85,7 +85,7 @@ public class NewTrackerForm extends AppCompatActivity {
             // fill in the form
             et_expensename.setText(expenseName);
             et_date.setText(date);
-            et_amount.setText(Integer.toString( amount));
+            et_amount.setText(Integer.toString((int) amount));
             // et_picturenumber.setText(Integer.toString(pictureNumber));
 
 

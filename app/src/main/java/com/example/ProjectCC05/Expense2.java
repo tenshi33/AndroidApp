@@ -2,10 +2,10 @@ package com.example.ProjectCC05;
 
 public class Expense2 {
 
-
+// History
 
     private String expenseName;
-    private int amount;
+    private float amount;
     //private int pictureNumber2;
 
     public String getDate() {
@@ -14,7 +14,7 @@ public class Expense2 {
 
     private String date;
 
-    public Expense2(String expenseName, int amount, /* int pictureNumber, */ String date) {
+    public Expense2(String expenseName, float amount, /* int pictureNumber, */ String date) {
          // super(expenseName, amount, date);
          this.expenseName = expenseName;
          this.amount = amount;
@@ -37,11 +37,11 @@ public class Expense2 {
         this.expenseName = expenseName;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
     /*

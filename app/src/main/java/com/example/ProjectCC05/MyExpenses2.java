@@ -6,6 +6,8 @@ import java.util.Random;
 
 
 public class MyExpenses2{
+
+    // History
     List<Expense2> myExpenseList2;
 
     public MyExpenses2(List<Expense2> myExpenseList) {

@@ -54,7 +54,7 @@ public class ExpenseAdapter extends BaseAdapter {
         Expense p = this.getItem(position);
 
         tv_expenseName.setText(p.getExpenseName());
-        tv_amount.setText(Integer.toString(p.getAmount()));
+        tv_amount.setText(Integer.toString((int) p.getAmount()));
         tv_date.setText(p.getDate());
 
         /*

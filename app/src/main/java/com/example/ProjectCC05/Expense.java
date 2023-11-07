@@ -5,13 +5,13 @@ import androidx.annotation.NonNull;
 public class Expense extends Expense2 implements Comparable<Expense> {
 
     private String expenseName;
-    private int amount;
+    private float amount;
     // private int pictureNumber;
     private String date;
 
 
 
-    public Expense(String expenseName, int amount/*, int pictureNumber*/, String date) {
+    public Expense(String expenseName, float amount/*, int pictureNumber*/, String date) {
         super(expenseName, amount, date);
         this.expenseName = expenseName;
         this.amount = amount;
@@ -27,7 +27,7 @@ public class Expense extends Expense2 implements Comparable<Expense> {
         return this.expenseName.compareTo(other.expenseName);
     }
 
-
+    /*
     public String getExpenseName() {
         return expenseName;
     }
@@ -36,11 +36,11 @@ public class Expense extends Expense2 implements Comparable<Expense> {
         this.expenseName = expenseName;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
     /*
@@ -51,7 +51,7 @@ public class Expense extends Expense2 implements Comparable<Expense> {
     public void setPictureNumber(int pictureNumber) {
         this.pictureNumber = pictureNumber;
     }
-    */
+    /
     public String getDate() {
         return date;
     }
@@ -60,6 +60,7 @@ public class Expense extends Expense2 implements Comparable<Expense> {
         this.date = date;
     }
 
+    */
 }
 
 
