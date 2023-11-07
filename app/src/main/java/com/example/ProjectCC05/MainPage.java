@@ -85,7 +85,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         // capture incoming data
         if (incomingMessages != null) {
 
-            //try {
+            try {
                 String expenseName = incomingMessages.getString("name");
                 float amount = Float.parseFloat(incomingMessages.getString("age"));
                 // int pictureNumber = Integer.parseInt(incomingMessages.getString("picturenumber"));
@@ -116,10 +116,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     e.printStackTrace();
                 }
 
-
-
-
-
                 // create new person object
                 Expense e = new Expense(expenseName, amount, /*pictureNumber,*/ dateString);
 
@@ -129,11 +125,11 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 }
                 myExpenses.getMyExpenseList().add(e);
                 adapter.notifyDataSetChanged();
-            /*
+
             } catch(Exception e) {
                 /*
                     To show error when Input Mismatch Error occurred
-                 /
+                 */
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
                 builder.setCancelable(false);
                 builder.setTitle("You have encountered an error!");
@@ -144,7 +140,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     public void onClick(DialogInterface dialogInterface, int i) {
                         /*
                             To go back to the New Expense Form activity after pressing try again
-                         /
+                         */
                         Intent tryAgain = new Intent(getApplicationContext(), NewTrackerForm.class);
                         startActivity(tryAgain);
                     }
@@ -152,7 +148,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 builder.show();
 
             }
-            */
+
         }
 
 
