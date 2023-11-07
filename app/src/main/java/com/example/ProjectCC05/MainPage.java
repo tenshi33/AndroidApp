@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -221,7 +222,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             totalAmount += item.getAmount();
         }
 
-        tv_totalAmount.setText(String.valueOf(totalAmount));
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedTotalAmount = "₱ " + decimalFormat.format(totalAmount);
+        tv_totalAmount.setText(formattedTotalAmount);
 
 
     }
