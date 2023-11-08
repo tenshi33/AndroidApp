@@ -1,5 +1,7 @@
 package com.example.ProjectCC05;
 
+import static java.util.Collections.addAll;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -7,14 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ExpenseAdapter extends BaseAdapter {
 
     Activity mActivity;
+
     MyExpenses myExpenses;
 
     public ExpenseAdapter(Activity mActivity, MyExpenses myExpenses) {
@@ -31,6 +36,7 @@ public class ExpenseAdapter extends BaseAdapter {
     public Expense getItem(int position) {
         return myExpenses.getMyExpenseList().get(position);
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -61,5 +67,15 @@ public class ExpenseAdapter extends BaseAdapter {
         tv_date.setText(p.getDate());
 
         return oneExpenseLine;
+    }
+
+    public void setMyExpenses(List<Expense> expenses) {
+
+        // clear();
+        addAll(expenses);
+        notifyDataSetChanged();
+        //addAll(expenses);
+        //notifyDataSetChanged();
+        //this.myExpenses = myExpenses;
     }
 }
