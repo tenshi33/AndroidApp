@@ -2,16 +2,20 @@ package com.example.ProjectCC05;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginPage extends AppCompatActivity {
 
-    private Button button;
+    private Button loginbtn;
+    private EditText et_username, et_password;
 
 
     @Override
@@ -28,25 +32,68 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
-        button = findViewById(R.id.loginbtn);
-        final TextView username = findViewById(R.id.et_usernameRegister);
-        final TextView password = findViewById(R.id.et_passwordRegister);
+        et_username = findViewById(R.id.et_username);
+        et_password = findViewById(R.id.et_password);
+        loginbtn = findViewById(R.id.loginbtn);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String enteredUsername = username.getText().toString();
-                String enteredPassword = password.getText().toString();
+            public void onClick(View view) {
+                String username = et_username.getText().toString();
+                String password = et_password.getText().toString();
 
-                if (enteredUsername.equals("admin") && enteredPassword.equals("1234")) {
+                SharedPreferences sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
+                String savedUsername = sharedPreferences.getString("username", "");
+                String savedPassword = sharedPreferences.getString("password", "");
+
+                if (username.equals(savedUsername) && password.equals(savedPassword)) {
                     Toast.makeText(LoginPage.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                    openActivity2();
-                } else {
+
+                    Intent intent = new Intent(LoginPage.this, MainPage.class);
+                    startActivity(intent);
+                }
+                else {
                     Toast.makeText(LoginPage.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
     }
+
+
+    /*
+    public void loginUser () {
+
+        et_username = findViewById(R.id.et_username);
+        et_password = findViewById(R.id.et_password);
+        loginbtn = findViewById(R.id.loginbtn);
+
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        String savedUsername = sharedPreferences.getString("username", "");
+        String savedPassword = sharedPreferences.getString("password", "");
+
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = et_username.getText().toString();
+                String password = et_password.getText().toString();
+                if (username.equals(savedUsername) && password.equals(savedPassword)) {
+                    Toast.makeText(LoginPage.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent (LoginPage.this, MainPage.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(LoginPage.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+    */
+
 
     public void openActivity2() {
         Intent intent = new Intent(this, MainPage.class);
