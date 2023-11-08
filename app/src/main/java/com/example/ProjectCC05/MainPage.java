@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
     MyExpenses myExpenses;
     MyExpenses2 myExpense2;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -235,8 +238,15 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             totalAmount += item.getAmount();
         }
 
-        tv_totalAmount.setText(String.valueOf(totalAmount));
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setCurrencySymbol("₱");  // Set the currency symbol
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##", symbols);
+        String formattedTotalAmount = "₱" + decimalFormat.format(totalAmount);
+
+        tv_totalAmount.setText(formattedTotalAmount);
     }
+
 
     public void editPerson(int position) {
         Intent i = new Intent(getApplicationContext(), NewTrackerForm.class);
