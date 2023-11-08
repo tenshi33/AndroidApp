@@ -3,13 +3,14 @@ package com.example.ProjectCC05;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class HistoryPage extends AppCompatActivity {
-    Button btn_back;
+    ImageButton btn_back;
     ListView lv_historyOfExpenses;
     ExpenseAdapter2 adapter2;
     MyExpenses2 myExpenses2;
