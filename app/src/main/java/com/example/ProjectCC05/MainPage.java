@@ -405,7 +405,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 int positionEdited = incomingMessages.getInt("edit");
                 String dateString = incomingMessages.getString("date");
 
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
                 try {
                     Date dueDate = sdf.parse(dateString);
                     long dueDateMillis = dueDate.getTime();

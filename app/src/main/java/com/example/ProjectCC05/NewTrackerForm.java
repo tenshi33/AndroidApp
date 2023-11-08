@@ -16,15 +16,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class NewTrackerForm extends AppCompatActivity {
+public class NewTrackerForm extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
 
     Button btn_ok, btn_cancel;
-    EditText et_expensename, et_amount, /*et_picturenumber, */et_date;
+    EditText et_expensename, et_amount, et_date;
     DatePickerDialog.OnDateSetListener mDateSetListener;
 
     int positionToEdit = -1;
@@ -38,9 +42,20 @@ public class NewTrackerForm extends AppCompatActivity {
         btn_cancel = findViewById(R.id.btn_cancel);
         et_amount = findViewById(R.id.et_amount);
         et_expensename = findViewById(R.id.et_expensename);
-        // et_picturenumber = findViewById(R.id.et_picturenumber);
         et_date = findViewById(R.id.et_date);
 
+        et_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
+
+
+
+        /*
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,17 +73,19 @@ public class NewTrackerForm extends AppCompatActivity {
                 dialog.show();
             }
         });
-
+        /
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 Log.d(TAG, "onDateSet: mm/dd/yyyy: ");
 
+                month++;
+
                 String date = month + "/" + day + "/" + year;
                 et_date.setText(date);
             }
         };
-
+        */
 
 
         // listen for incoming data
@@ -123,5 +140,19 @@ public class NewTrackerForm extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        String selectedDate = dateFormat.format(cal.getTime());
+
+        et_date.setText(selectedDate);
     }
 }

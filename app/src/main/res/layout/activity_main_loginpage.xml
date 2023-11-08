@@ -46,7 +46,7 @@
         app:layout_constraintVertical_bias="0.564" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/btn_register"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:backgroundTint="@color/white"
@@ -71,7 +71,7 @@
         android:textColor="#55ACEE"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/register"
+        app:layout_constraintRight_toLeftOf="@id/btn_register"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.913" />

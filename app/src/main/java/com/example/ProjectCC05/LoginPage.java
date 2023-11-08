@@ -12,7 +12,8 @@ import android.widget.Toast;
 public class LoginPage extends AppCompatActivity {
 
     private Button button;
-//ang panget ko
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +29,8 @@ public class LoginPage extends AppCompatActivity {
         });
 
         button = findViewById(R.id.loginbtn);
-        final TextView username = findViewById(R.id.username);
-        final TextView password = findViewById(R.id.password);
+        final TextView username = findViewById(R.id.et_usernameRegister);
+        final TextView password = findViewById(R.id.et_passwordRegister);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
