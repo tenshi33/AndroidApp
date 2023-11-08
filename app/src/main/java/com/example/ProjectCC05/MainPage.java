@@ -267,12 +267,12 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        if (spin_sort.getSelectedItem().toString().equals("Alphabet")) {
+        if (spin_sort.getSelectedItem().toString().equals("A-Z")) {
             Toast.makeText(MainPage.this, "Sort by Alphabet", Toast.LENGTH_SHORT).show();
             Collections.sort(myExpenses.getMyExpenseList());
             expenseAdapter.notifyDataSetChanged();
         }
-        if (spin_sort.getSelectedItem().toString().equals("Amount")) {
+        if (spin_sort.getSelectedItem().toString().equals("Low to High")) {
             Toast.makeText(MainPage.this, "Sort by Amount", Toast.LENGTH_SHORT).show();
             Collections.sort(myExpenses.getMyExpenseList(), new Comparator<Expense>() {
                 @Override
