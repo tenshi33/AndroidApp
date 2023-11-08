@@ -68,12 +68,13 @@
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Username"
+
+
         android:inputType="text"
         android:textColor="#9F9F9F"
         android:textColorHint="#9F9F9F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
