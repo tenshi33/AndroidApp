@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +27,8 @@ import java.util.Locale;
 
 public class NewTrackerForm extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-
-    Button btn_ok, btn_cancel;
+    Button btn_ok;
+    ImageButton btn_cancel;
     EditText et_expensename, et_amount, et_date;
     DatePickerDialog.OnDateSetListener mDateSetListener;
 
