@@ -33,7 +33,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -42,18 +41,14 @@ import java.util.List;
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
-    ImageButton btn_history, homebtn;
+    ImageButton btn_history, btn_home;
     Button btn_add;
     Spinner spin_sort;
-
     ListView lv_listOfExpenses;
-
     ExpenseAdapter expenseAdapter;
-    ExpenseAdapter2 adapter2;
-
+    HistoryAdapter historyAdapter;
     MyExpenses myExpenses;
-    MyExpenses2 myExpense2;
-
+    MyHistoryExpenses myHistoryExpenses;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -61,21 +56,13 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("expense_channel_id", "Expense Notifications", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
-        homebtn = (ImageButton) findViewById(R.id.homebtn);
-        homebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMainPage();
-            }
-        });
-
+        btn_home = (ImageButton) findViewById(R.id.btn_home);
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
         spin_sort = findViewById(R.id.spin_sort);
@@ -83,83 +70,15 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
 
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
-        myExpense2 = ((MyApplication) this.getApplication()).getMyExpenses2();
+        myHistoryExpenses = ((MyApplication) this.getApplication()).getMyExpenses2();
         expenseAdapter = new ExpenseAdapter(MainPage.this, myExpenses);
-        adapter2 = new ExpenseAdapter2(MainPage.this, myExpense2);
-
+        historyAdapter = new HistoryAdapter(MainPage.this, myHistoryExpenses);
+        // Loading and displaying data from the SharedPreferences
         loadAndDisplayData();
 
         lv_listOfExpenses.setAdapter(expenseAdapter);
-
+        // Calling the method for adding new items
         addNewItem();
-
-        /*
-        // listen for incoming messages or see if there is an Intent coming to this
-        Bundle incomingMessages = getIntent().getExtras();
-
-        if (incomingMessages != null) {
-            try {
-                String expenseName = incomingMessages.getString("name");
-                float amount = Float.parseFloat(incomingMessages.getString("age"));
-                int positionEdited = incomingMessages.getInt("edit");
-                String dateString = incomingMessages.getString("date");
-
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                try {
-                    Date dueDate = sdf.parse(dateString);
-                    long dueDateMillis = dueDate.getTime();
-
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    Intent intent = new Intent (this, NotificationReceiver.class);
-
-                    intent.putExtra("dueDateMillis", dueDateMillis);
-
-                    int flags;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        flags = PendingIntent.FLAG_IMMUTABLE;
-                    }
-                    else {
-                        flags = 0;
-                    }
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, flags);
-
-                    alarmManager.set(AlarmManager.RTC, dueDateMillis, pendingIntent);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                Expense e = new Expense(expenseName, amount, dateString);
-
-                if (positionEdited >-1) {
-                    myExpenses.getMyExpenseList().remove(positionEdited);
-                }
-                myExpenses.getMyExpenseList().add(e);
-                expenseAdapter.notifyDataSetChanged();
-
-                saveDataToSharedPreferences(expenseName, amount, dateString);
-
-            } catch (Exception e) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
-                builder.setCancelable(false);
-                builder.setTitle("You have encountered an error!");
-                builder.setMessage("You entered the wrong input. Please try again");
-
-                builder.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        // To go back to the New Expense Form activity after pressing try again
-
-                        Intent tryAgain = new Intent(getApplicationContext(), NewTrackerForm.class);
-                        startActivity(tryAgain);
-                    }
-                });
-                builder.show();
-            }
-        }
-        */
-
-
 
         btn_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +93,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         spin_sort.setAdapter(arr);
         spin_sort.setOnItemSelectedListener(this);
 
-
         btn_add.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), NewTrackerForm.class);
@@ -184,24 +101,23 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-
-        /*
-            For editing the items when tapped
-         */
+        btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainPage();
+            }
+        });
+         //   For editing the items when tapped
         lv_listOfExpenses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 editPerson(position);
             }
         });
-
-
         // Deleting an Item and then transferring it to the history listview
         lv_listOfExpenses.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                final int item = position;
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
                 builder.setCancelable(true);
                 builder.setTitle("Are you sure?");
@@ -212,12 +128,14 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
                         Object selectedItem = lv_listOfExpenses.getItemAtPosition(position);
                         myExpenses.getMyExpenseList().remove(selectedItem);
-                        myExpense2.getMyExpenseList2().add((Expense2) selectedItem);
+
+                        addHistoryItem((History) selectedItem);
+                        //myExpense2.getMyExpenseList2().add((Expense2) selectedItem);
+                        removeItemFromSharedPreferences((History) selectedItem);
+                        // removeItemFromHistorySharedPreferences((Expense2) selectedItem);
+
                         expenseAdapter.notifyDataSetChanged();
-                        adapter2.notifyDataSetChanged();
-
-                        removeItemFromSharedPreferences((Expense2) selectedItem);
-
+                        historyAdapter.notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("NO", null);
@@ -226,12 +144,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-       totalAmount();
-
-
-
-
-
+        totalAmount();
     }
 
     public void totalAmount() {
@@ -250,10 +163,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         tv_totalAmount.setText(formattedTotalAmount);
     }
 
-
     public void editPerson(int position) {
         Intent i = new Intent(getApplicationContext(), NewTrackerForm.class);
-
         // get the contents of person at position
         Expense p = myExpenses.getMyExpenseList().get(position);
 
@@ -261,12 +172,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         i.putExtra("name", p.getExpenseName());
         i.putExtra("age", p.getAmount());
         i.putExtra("date", p.getDate());
-        // i.putExtra("picturenumber", p.getPictureNumber());
 
         startActivity(i);
-
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -292,7 +200,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     else {
                         return 0; // e1 = e2
                     }
-                    //return e1.getAmount() - e2.getAmount();
                 }
             });
             expenseAdapter.notifyDataSetChanged();
@@ -302,7 +209,15 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             Collections.sort(myExpenses.getMyExpenseList(), new Comparator<Expense>() {
                 @Override
                 public int compare(Expense d1, Expense d2) {
-                    return d1.getDate().compareTo(d2.getDate());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+                    try {
+                        Date date1 = dateFormat.parse(d1.getDate());
+                        Date date2 = dateFormat.parse(d2.getDate());
+                        return date1.compareTo(date2);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
                 }
             });
             expenseAdapter.notifyDataSetChanged();
@@ -333,8 +248,126 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 startActivity(logOut);
             }
         });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
         builder.show();
         //super.onBackPressed();
+    }
+
+    public void addHistoryItem (History history) {
+
+        if (!myHistoryExpenses.getMyExpenseList2().contains(history)) {
+            myHistoryExpenses.getMyExpenseList2().add(history);
+            historyAdapter.notifyDataSetChanged();
+            saveHistoryToSharedPreferences(myHistoryExpenses.getMyExpenseList2());
+        }
+
+
+        /*
+        if (myExpense2.getMyExpenseList2().contains(expense2)) {
+            myExpense2.getMyExpenseList2().add(expense2);
+            saveHistoryToSharedPreferences(myExpense2.getMyExpenseList2());
+            removeItemFromHistorySharedPreferences(expense2);
+        }
+
+        /*
+        myExpense2.getMyExpenseList2().add(expense2);
+        adapter2.notifyDataSetChanged();
+        saveHistoryToSharedPreferences(myExpense2.getMyExpenseList2());
+        removeItemFromHistorySharedPreferences(expense2);
+        adapter2.notifyDataSetChanged();
+        */
+
+    }
+
+    private List<History> getHistoryFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        String historyJson = sharedPreferences.getString("history", null);
+
+        List<History> historyList = new ArrayList<>();
+
+        if (historyJson != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(historyJson);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonExpense = jsonArray.getJSONObject(i);
+                    String expenseName = jsonExpense.getString("expenseName");
+                    float amount = (float) jsonExpense.getDouble("amount");
+                    String dateString = jsonExpense.getString("dateString");
+
+                    History loadedExpense = new History(expenseName, amount, dateString);
+                    historyList.add(loadedExpense);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return historyList;
+    }
+
+    private void saveHistoryToSharedPreferences (List<History> history) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+            JSONArray jsonArray = new JSONArray();
+            for (History item : history) {
+                JSONObject jsonExpense = new JSONObject();
+                jsonExpense.put("expenseName", item.getExpenseName());
+                jsonExpense.put("amount", item.getAmount());
+                jsonExpense.put("dateString", item.getDate());
+                jsonArray.put(jsonExpense);
+            }
+
+            editor.putString("history", jsonArray.toString());
+            editor.apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeItemFromHistorySharedPreferences (History history) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String expenseJson = sharedPreferences.getString("history", null);
+
+        if (expenseJson != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(expenseJson);
+                JSONArray updatedArray = new JSONArray();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonExpense = jsonArray.getJSONObject(i);
+                    String expenseName = jsonExpense.getString("expenseName");
+                    float amount = (float) jsonExpense.getDouble("amount");
+                    String dateString = jsonExpense.getString("dateString");
+
+                    // Check if the loaded expense matches the one to be removed
+                    if (history.getExpenseName().equals(expenseName)
+                        && history.getAmount() == amount
+                        && history.getDate().equals(dateString)) {
+                        // Do not add the item to the updated array, effectively removing it
+                        continue;
+                    }
+
+                    updatedArray.put(jsonExpense);
+                }
+
+                editor.putString("history", updatedArray.toString());
+                editor.apply();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -364,27 +397,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         }
 
-        //int expenseCount = sharedPreferences.getInt("expenseCount", 0);
-
-        /*
-        for (int i = 0; i < expenseCount; i++) {
-            String savedExpenseName = sharedPreferences.getString("expenseName" + i, "");
-            float savedAmount = sharedPreferences.getFloat("amount" + i , 0.0f);
-            String savedDateString = sharedPreferences.getString("dateString" + i, "");
-
-            // Creates an Expense object with the loaded data
-            Expense loadedExpense = new Expense(savedExpenseName, savedAmount, savedDateString);
-
-            if (!myExpenses.getMyExpenseList().contains(loadedExpense)) {
-                myExpenses.getMyExpenseList().add(loadedExpense);
-            }
-        }
-        */
-        // Notify the adapter of the changes
-
     }
 
-    public void removeItemFromSharedPreferences(Expense2 expense2) {
+    public void removeItemFromSharedPreferences(History history) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -402,9 +417,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     String dateString = jsonExpense.getString("dateString");
 
                     // Check if the loaded expense matches the one to be removed
-                    if (expense2.getExpenseName().equals(expenseName)
-                            && expense2.getAmount() == amount
-                            && expense2.getDate().equals(dateString)) {
+                    if (history.getExpenseName().equals(expenseName)
+                            && history.getAmount() == amount
+                            && history.getDate().equals(dateString)) {
                         // Do not add the item to the updated array (effectively removing it)
                         continue;
                     }
@@ -483,12 +498,12 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 }
 
                 boolean itemExistInHistory = false;
-                for (Expense2 expense2 : myExpense2.getMyExpenseList2()) {
-                    if (expense2.getExpenseName().equals(expenseName)
-                            && expense2.getAmount() == amount
-                            && expense2.getDate().equals(dateString)) {
+                for (History history : myHistoryExpenses.getMyExpenseList2()) {
+                    if (history.getExpenseName().equals(expenseName)
+                            && history.getAmount() == amount
+                            && history.getDate().equals(dateString)) {
                         itemExistInHistory = true;
-                        myExpense2.getMyExpenseList2().remove(expense2);
+                        myHistoryExpenses.getMyExpenseList2().remove(history);
                         break;
                     }
                 }

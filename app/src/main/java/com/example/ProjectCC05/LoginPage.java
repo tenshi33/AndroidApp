@@ -61,40 +61,6 @@ public class LoginPage extends AppCompatActivity {
 
     }
 
-
-    /*
-    public void loginUser () {
-
-        et_username = findViewById(R.id.et_username);
-        et_password = findViewById(R.id.et_password);
-        loginbtn = findViewById(R.id.loginbtn);
-
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        String savedUsername = sharedPreferences.getString("username", "");
-        String savedPassword = sharedPreferences.getString("password", "");
-
-        loginbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = et_username.getText().toString();
-                String password = et_password.getText().toString();
-                if (username.equals(savedUsername) && password.equals(savedPassword)) {
-                    Toast.makeText(LoginPage.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent (LoginPage.this, MainPage.class);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(LoginPage.this, "LOGIN FAILED", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
-    */
-
-
     public void openActivity2() {
         Intent intent = new Intent(this, MainPage.class);
         startActivity(intent);

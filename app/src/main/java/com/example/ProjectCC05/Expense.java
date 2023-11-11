@@ -2,22 +2,17 @@ package com.example.ProjectCC05;
 
 import androidx.annotation.NonNull;
 
-public class Expense extends Expense2 implements Comparable<Expense> {
+public class Expense extends History implements Comparable<Expense> {
 
     private String expenseName;
     private float amount;
-    // private int pictureNumber;
     private String date;
 
-
-
-    public Expense(String expenseName, float amount/*, int pictureNumber*/, String date) {
+    public Expense(String expenseName, float amount, String date) {
         super(expenseName, amount, date);
         this.expenseName = expenseName;
         this.amount = amount;
-        // this.pictureNumber = pictureNumber;
         this.date = date;
-
     }
 
     // compareTo for sorting
@@ -26,41 +21,6 @@ public class Expense extends Expense2 implements Comparable<Expense> {
 
         return this.expenseName.compareTo(other.expenseName);
     }
-
-    /*
-    public String getExpenseName() {
-        return expenseName;
-    }
-
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
-    }
-
-    public float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(float amount) {
-        this.amount = amount;
-    }
-    /*
-    public int getPictureNumber() {
-        return pictureNumber;
-    }
-
-    public void setPictureNumber(int pictureNumber) {
-        this.pictureNumber = pictureNumber;
-    }
-    /
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    */
 }
 
 

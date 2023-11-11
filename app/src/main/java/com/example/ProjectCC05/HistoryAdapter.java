@@ -9,25 +9,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ExpenseAdapter2 extends BaseAdapter {
+public class HistoryAdapter extends BaseAdapter {
 
     // History
     Activity mActivity;
-    MyExpenses2 myExpenses2;
+    MyHistoryExpenses myHistoryExpenses;
 
-    public ExpenseAdapter2(Activity mActivity, MyExpenses2 myExpenses2) {
+    public HistoryAdapter(Activity mActivity, MyHistoryExpenses myHistoryExpenses) {
         this.mActivity = mActivity;
-        this.myExpenses2 = myExpenses2;
+        this.myHistoryExpenses = myHistoryExpenses;
     }
 
     @Override
     public int getCount() {
-        return myExpenses2.getMyExpenseList2().size();
+        return myHistoryExpenses.getMyExpenseList2().size();
     }
 
     @Override
-    public Expense2 getItem(int position) {
-        return myExpenses2.getMyExpenseList2().get(position);
+    public History getItem(int position) {
+        return myHistoryExpenses.getMyExpenseList2().get(position);
 
     }
 
@@ -53,7 +53,7 @@ public class ExpenseAdapter2 extends BaseAdapter {
 
 
 
-        Expense2 p = this.getItem(position);
+        History p = this.getItem(position);
 
         tv_expenseName.setText(p.getExpenseName());
         tv_amount.setText(Integer.toString((int) p.getAmount()));

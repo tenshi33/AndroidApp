@@ -1,6 +1,6 @@
 package com.example.ProjectCC05;
 
-public class Expense2 {
+public class History {
 
 // History
 
@@ -14,7 +14,7 @@ public class Expense2 {
 
     private String date;
 
-    public Expense2(String expenseName, float amount, /* int pictureNumber, */ String date) {
+    public History(String expenseName, float amount, /* int pictureNumber, */ String date) {
          // super(expenseName, amount, date);
          this.expenseName = expenseName;
          this.amount = amount;
@@ -25,7 +25,7 @@ public class Expense2 {
 
 
     // compareTo for sorting
-    public int compareTo(Expense2 expense2) {
+    public int compareTo(History history) {
         return 0;
     }
 

@@ -5,14 +5,14 @@ import android.app.Application;
 public class MyApplication extends Application {
 
     private MyExpenses myExpense = new MyExpenses();
-    private MyExpenses2 myExpenses2 = new MyExpenses2();
+    private MyHistoryExpenses myHistoryExpenses = new MyHistoryExpenses();
 
      public MyExpenses getMyExpense() {
         return myExpense;
     }
 
-    public MyExpenses2 getMyExpenses2() {
-         return myExpenses2;
+    public MyHistoryExpenses getMyExpenses2() {
+         return myHistoryExpenses;
     }
 
     public void setMyExpense(MyExpenses myExpense) {
