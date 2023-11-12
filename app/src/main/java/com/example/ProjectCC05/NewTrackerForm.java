@@ -1,25 +1,24 @@
 package com.example.ProjectCC05;
 
-import static android.content.ContentValues.TAG;
-
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,11 +28,14 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
 
     Button btn_ok;
     ImageButton btn_cancel;
+    TextView text1;
     EditText et_expensename, et_amount, et_date;
-    DatePickerDialog.OnDateSetListener mDateSetListener;
+    CheckBox cbox_setReminder;
+    Spinner spin_sign;
 
     int positionToEdit = -1;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,19 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         et_amount = findViewById(R.id.et_amount);
         et_expensename = findViewById(R.id.et_expensename);
         et_date = findViewById(R.id.et_date);
+        cbox_setReminder = findViewById(R.id.cbox_setReminder);
+        spin_sign = findViewById(R.id.spin_sign);
+
+
+        CharSequence[] items = getResources().getTextArray(R.array.signs);
+        RightAlignedSpinnerAdapter signAdapter = new RightAlignedSpinnerAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                items);
+        signAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sign.setAdapter(signAdapter);
+
+
 
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,60 +68,19 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             }
         });
 
-
-
-
-        /*
-        et_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(
-                        NewTrackerForm.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListener,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-        /
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                Log.d(TAG, "onDateSet: mm/dd/yyyy: ");
-
-                month++;
-
-                String date = month + "/" + day + "/" + year;
-                et_date.setText(date);
-            }
-        };
-        */
-
-
         // listen for incoming data
 
         Bundle incomingIntent = getIntent().getExtras();
 
         if (incomingIntent != null) {
             String expenseName = incomingIntent.getString("name");
-            float amount = incomingIntent.getInt("age");
-            // int pictureNumber = incomingIntent.getInt("picturenumber");
+            float amount = incomingIntent.getFloat("age", 0.0f);
             String date = incomingIntent.getString("date");
             positionToEdit = incomingIntent.getInt("edit");
-
             // fill in the form
             et_expensename.setText(expenseName);
             et_date.setText(date);
-            et_amount.setText(Integer.toString((int) amount));
-            // et_picturenumber.setText(Integer.toString(pictureNumber));
-
-
+            et_amount.setText(Float.toString((float) amount));
 
         }
 
@@ -114,24 +88,47 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onClick(View view) {
 
-                // get strings from et_ view objects
-                String newName = et_expensename.getText().toString();
-                String newAge = et_amount.getText().toString();
-                // String newPictureNumber = et_picturenumber.getText().toString();
-                String newDate = et_date.getText().toString();
+                try {
+                    // get strings from et_ view objects
+                    String newName = et_expensename.getText().toString();
+                    String newAmount = et_amount.getText().toString();
+                    String newDate = et_date.getText().toString();
+                    Float newAmountFloat = Float.parseFloat(newAmount);
+                    boolean setReminder = cbox_setReminder.isChecked();
 
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+                        Date parsedDate = sdf.parse(newDate);
+                    } catch (ParseException e) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(NewTrackerForm.this);
+                        builder.setCancelable(false);
+                        builder.setTitle("Date Format Error!");
+                        builder.setMessage("Please enter the date in the format MMMM dd, yyyy");
+                        builder.setPositiveButton("OK", null);
+                        builder.show();
+                        return;
+                    }
 
-                // put strings into a message for MainActivity
-                Intent i = new Intent(view.getContext(), MainPage.class);
+                    // put strings into a message for MainActivity
+                    Intent i = new Intent(view.getContext(), MainPage.class);
 
-                i.putExtra("edit", positionToEdit);
-                i.putExtra("name", newName);
-                i.putExtra("age", newAge);
-                i.putExtra("date", newDate);
-                // i.putExtra("picturenumber", newPictureNumber);
+                    i.putExtra("edit", positionToEdit);
+                    i.putExtra("name", newName);
+                    i.putExtra("amount", addAmount());
+                    i.putExtra("date", newDate);
+                    i.putExtra("setReminder", setReminder);
 
-                // start main Activity again
-                startActivity(i);
+                    // start main Activity again
+                    startActivity(i);
+                } catch (NumberFormatException e) {
+                    // To show an error when an input mismatch error occurred
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewTrackerForm.this);
+                    builder.setCancelable(false);
+                    builder.setTitle("Input Error!");
+                    builder.setMessage("Please enter a valid number for the amount field.");
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+                }
             }
         });
 
@@ -142,6 +139,23 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             }
         });
 
+    }
+
+    private float addAmount() {
+        String selectedSign = spin_sign.getSelectedItem().toString();
+        String amountString = et_amount.getText().toString();
+
+        if (!amountString.isEmpty()) {
+            float amount = Float.parseFloat(amountString);
+
+            if ("-".equals(selectedSign)) {
+                amount = -amount;
+            }
+
+            return amount;
+        } else {
+            return 0.0f;
+        }
     }
 
     @Override

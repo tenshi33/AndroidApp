@@ -70,12 +70,7 @@ public class ExpenseAdapter extends BaseAdapter {
     }
 
     public void setMyExpenses(List<Expense> expenses) {
-
-        // clear();
         addAll(expenses);
         notifyDataSetChanged();
-        //addAll(expenses);
-        //notifyDataSetChanged();
-        //this.myExpenses = myExpenses;
     }
 }

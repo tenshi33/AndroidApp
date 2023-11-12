@@ -11,10 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -42,7 +44,7 @@ import java.util.List;
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
     ImageButton btn_history, btn_home;
-    Button btn_add;
+    Button btn_add, btn_addBalance;
     Spinner spin_sort;
     ListView lv_listOfExpenses;
     ExpenseAdapter expenseAdapter;
@@ -65,6 +67,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         btn_home = (ImageButton) findViewById(R.id.btn_home);
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
+        btn_addBalance = findViewById(R.id.btn_addBalance);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
@@ -107,6 +110,46 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 openMainPage();
             }
         });
+
+        btn_addBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
+                builder.setTitle("Add Balance");
+
+                // Set up input
+                final EditText input = new EditText(MainPage.this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            // Get entered Balance
+                            float enteredBalance = Float.parseFloat(input.getText().toString());
+
+                            // Add the balance to the total amount
+                            float currentTotal = getTotalAmount();
+                            float newTotal = currentTotal + enteredBalance;
+
+                            // Display the updated total
+                            displayTotalAmount(newTotal);
+
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(MainPage.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
          //   For editing the items when tapped
         lv_listOfExpenses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -144,21 +187,27 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-        totalAmount();
+
     }
 
-    public void totalAmount() {
-        // Calculates the total of the expenses then displays it to the tv_totalAmount
-        float totalAmount = 0;
-        for (Expense item : myExpenses.getMyExpenseList()) {
-            totalAmount += item.getAmount();
-        }
+    private float getTotalAmount() {
+        // Get the numeric value from the tv_totalAmount
+        String totalAmountString = tv_totalAmount.getText().toString().replaceAll("[^0-9.]", "");
 
+        if (!totalAmountString.isEmpty()) {
+            return Float.parseFloat(totalAmountString);
+        }
+        else {
+            return 0.0f;
+        }
+    }
+
+    private void displayTotalAmount(float amount) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setCurrencySymbol("₱");  // Set the currency symbol
+        symbols.setCurrencySymbol("₱");
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##", symbols);
-        String formattedTotalAmount = "₱" + decimalFormat.format(totalAmount);
+        String formattedTotalAmount = "₱" + decimalFormat.format(amount);
 
         tv_totalAmount.setText(formattedTotalAmount);
     }
@@ -260,56 +309,11 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     }
 
     public void addHistoryItem (History history) {
-
         if (!myHistoryExpenses.getMyExpenseList2().contains(history)) {
             myHistoryExpenses.getMyExpenseList2().add(history);
             historyAdapter.notifyDataSetChanged();
             saveHistoryToSharedPreferences(myHistoryExpenses.getMyExpenseList2());
         }
-
-
-        /*
-        if (myExpense2.getMyExpenseList2().contains(expense2)) {
-            myExpense2.getMyExpenseList2().add(expense2);
-            saveHistoryToSharedPreferences(myExpense2.getMyExpenseList2());
-            removeItemFromHistorySharedPreferences(expense2);
-        }
-
-        /*
-        myExpense2.getMyExpenseList2().add(expense2);
-        adapter2.notifyDataSetChanged();
-        saveHistoryToSharedPreferences(myExpense2.getMyExpenseList2());
-        removeItemFromHistorySharedPreferences(expense2);
-        adapter2.notifyDataSetChanged();
-        */
-
-    }
-
-    private List<History> getHistoryFromSharedPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        String historyJson = sharedPreferences.getString("history", null);
-
-        List<History> historyList = new ArrayList<>();
-
-        if (historyJson != null) {
-            try {
-                JSONArray jsonArray = new JSONArray(historyJson);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonExpense = jsonArray.getJSONObject(i);
-                    String expenseName = jsonExpense.getString("expenseName");
-                    float amount = (float) jsonExpense.getDouble("amount");
-                    String dateString = jsonExpense.getString("dateString");
-
-                    History loadedExpense = new History(expenseName, amount, dateString);
-                    historyList.add(loadedExpense);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return historyList;
     }
 
     private void saveHistoryToSharedPreferences (List<History> history) {
@@ -332,45 +336,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             e.printStackTrace();
         }
     }
-
-    public void removeItemFromHistorySharedPreferences (History history) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        String expenseJson = sharedPreferences.getString("history", null);
-
-        if (expenseJson != null) {
-            try {
-                JSONArray jsonArray = new JSONArray(expenseJson);
-                JSONArray updatedArray = new JSONArray();
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonExpense = jsonArray.getJSONObject(i);
-                    String expenseName = jsonExpense.getString("expenseName");
-                    float amount = (float) jsonExpense.getDouble("amount");
-                    String dateString = jsonExpense.getString("dateString");
-
-                    // Check if the loaded expense matches the one to be removed
-                    if (history.getExpenseName().equals(expenseName)
-                        && history.getAmount() == amount
-                        && history.getDate().equals(dateString)) {
-                        // Do not add the item to the updated array, effectively removing it
-                        continue;
-                    }
-
-                    updatedArray.put(jsonExpense);
-                }
-
-                editor.putString("history", updatedArray.toString());
-                editor.apply();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
 
     private void loadAndDisplayData() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
@@ -464,78 +429,62 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
         // capture incoming data
         if (incomingMessages != null) {
-            try {
-                String expenseName = incomingMessages.getString("name");
-                float amount = Float.parseFloat(incomingMessages.getString("age"));
-                int positionEdited = incomingMessages.getInt("edit");
-                String dateString = incomingMessages.getString("date");
+            String expenseName = incomingMessages.getString("name");
+            float amount = incomingMessages.getFloat("amount", 0.0f);
+            int positionEdited = incomingMessages.getInt("edit");
+            String dateString = incomingMessages.getString("date");
+            boolean setReminder = incomingMessages.getBoolean("setReminder");
 
-                SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
-                try {
-                    Date dueDate = sdf.parse(dateString);
-                    long dueDateMillis = dueDate.getTime();
-
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    Intent intent = new Intent(this, NotificationReceiver.class);
-
-                    intent.putExtra("dueDateMillis", dueDateMillis);
-
-                    int flags;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        flags = PendingIntent.FLAG_IMMUTABLE;
-                    } else {
-                        flags = 0;
-                    }
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, flags);
-                    alarmManager.set(AlarmManager.RTC, dueDateMillis, pendingIntent);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                if (positionEdited > -1) {
+            if (positionEdited > -1) {
                     // Remove the item at the specified position if it is an edit operation
-                    myExpenses.getMyExpenseList().remove(positionEdited);
-                }
-
-                boolean itemExistInHistory = false;
-                for (History history : myHistoryExpenses.getMyExpenseList2()) {
-                    if (history.getExpenseName().equals(expenseName)
-                            && history.getAmount() == amount
-                            && history.getDate().equals(dateString)) {
-                        itemExistInHistory = true;
-                        myHistoryExpenses.getMyExpenseList2().remove(history);
-                        break;
-                    }
-                }
-
-                if (!itemExistInHistory) {
-                    Expense e = new Expense(expenseName, amount, dateString);
-                    myExpenses.getMyExpenseList().add(e);
-                    expenseAdapter.notifyDataSetChanged();
-
-                    saveExpensesToSharedPreferences(myExpenses.getMyExpenseList());
-                }
-            } catch (Exception e) {
-            /*
-                To show an error when an input mismatch error occurred
-             */
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
-                builder.setCancelable(false);
-                builder.setTitle("You have encountered an error!");
-                builder.setMessage("You entered the wrong input. Please try again");
-
-                builder.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    /*
-                        To go back to the New Expense Form activity after pressing try again
-                     */
-                        Intent tryAgain = new Intent(getApplicationContext(), NewTrackerForm.class);
-                        startActivity(tryAgain);
-                    }
-                });
-                builder.show();
+                myExpenses.getMyExpenseList().remove(positionEdited);
             }
+
+            boolean itemExistInHistory = false;
+            for (History history : myHistoryExpenses.getMyExpenseList2()) {
+                if (history.getExpenseName().equals(expenseName)
+                        && history.getAmount() == amount
+                        && history.getDate().equals(dateString)) {
+                    itemExistInHistory = true;
+                    myHistoryExpenses.getMyExpenseList2().remove(history);
+                    break;
+                }
+            }
+
+            if (!itemExistInHistory) {
+                Expense e = new Expense(expenseName, amount, dateString);
+                myExpenses.getMyExpenseList().add(e);
+                expenseAdapter.notifyDataSetChanged();
+                saveExpensesToSharedPreferences(myExpenses.getMyExpenseList());
+            }
+
+            if (setReminder) {
+                setAlarmManager(dateString);
+            }
+        }
+    }
+
+    private void setAlarmManager(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+        try {
+            Date dueDate = sdf.parse(dateString);
+            long dueDateMillis = dueDate.getTime();
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, NotificationReceiver.class);
+
+            intent.putExtra("dueDateMillis", dueDateMillis);
+
+            int flags;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                flags = PendingIntent.FLAG_IMMUTABLE;
+            } else {
+                flags = 0;
+            }
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, flags);
+            alarmManager.set(AlarmManager.RTC, dueDateMillis, pendingIntent);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }
