@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -39,12 +40,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
     ImageButton btn_history, btn_home;
-    Button btn_add, btn_addBalance;
+    Button btn_add, btn_addBalance, btn_subtractBalance;
     Spinner spin_sort;
     ListView lv_listOfExpenses;
     ExpenseAdapter expenseAdapter;
@@ -68,6 +70,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
         btn_addBalance = findViewById(R.id.btn_addBalance);
+        btn_subtractBalance = findViewById(R.id.btn_subtractBalance);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
@@ -78,6 +81,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         historyAdapter = new HistoryAdapter(MainPage.this, myHistoryExpenses);
         // Loading and displaying data from the SharedPreferences
         loadAndDisplayData();
+
+        float savedTotal = getSavedTotalAmount();
+        displayTotalAmount(savedTotal);
 
         lv_listOfExpenses.setAdapter(expenseAdapter);
         // Calling the method for adding new items
@@ -104,13 +110,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             }
         });
 
-        btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMainPage();
-            }
-        });
-
         btn_addBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,31 +125,66 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
-                            // Get entered Balance
                             float enteredBalance = Float.parseFloat(input.getText().toString());
 
                             // Add the balance to the total amount
                             float currentTotal = getTotalAmount();
-                            float newTotal = currentTotal + enteredBalance;
+                            float newTotal = currentTotal + Math.abs(enteredBalance);
 
+                            // Save the new total amount
+                            saveTotalAmount(newTotal);
                             // Display the updated total
                             displayTotalAmount(newTotal);
-
                         } catch (NumberFormatException e) {
-                            Toast.makeText(MainPage.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainPage.this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
                     }
                 });
                 builder.show();
             }
         });
-         //   For editing the items when tapped
+
+        btn_subtractBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
+                builder.setTitle("Subtract Balance");
+
+                final EditText input = new EditText(MainPage.this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            // Get entered amount to subtract
+                            float enteredAmount = Float.parseFloat(input.getText().toString());
+
+                            // Subtract the amount from the total
+                            float currentTotal = getTotalAmount();
+                            float newTotal = currentTotal - Math.abs(enteredAmount);
+                            // Save the new total amount
+                            saveTotalAmount(newTotal);
+
+                            // Display the updated total
+                            displayTotalAmount(newTotal);
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(MainPage.this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMainPage();
+            }
+        });
+        //   For editing the items when tapped
         lv_listOfExpenses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -168,15 +202,10 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         Object selectedItem = lv_listOfExpenses.getItemAtPosition(position);
                         myExpenses.getMyExpenseList().remove(selectedItem);
-
                         addHistoryItem((History) selectedItem);
-                        //myExpense2.getMyExpenseList2().add((Expense2) selectedItem);
                         removeItemFromSharedPreferences((History) selectedItem);
-                        // removeItemFromHistorySharedPreferences((Expense2) selectedItem);
-
                         expenseAdapter.notifyDataSetChanged();
                         historyAdapter.notifyDataSetChanged();
                     }
@@ -186,30 +215,55 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 return true;
             }
         });
+    }
 
+    private void saveTotalAmount (float amount) {
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putFloat("totalBalance", amount);
+        editor.apply();
+    }
 
+    private float getSavedTotalAmount () {
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        return preferences.getFloat("totalBalance", 0.0f);
     }
 
     private float getTotalAmount() {
         // Get the numeric value from the tv_totalAmount
-        String totalAmountString = tv_totalAmount.getText().toString().replaceAll("[^0-9.]", "");
+        String totalAmountString = tv_totalAmount.getText().toString();
 
+        // Check if the total amount string is not empty
         if (!totalAmountString.isEmpty()) {
+            if (totalAmountString.contains("-")) {
+                //Remove all non-numeric characters except minus sign and the decimal
+                totalAmountString = totalAmountString.replaceAll("[^0-9.-]", "");
+            } else {
+                totalAmountString = totalAmountString.replaceAll("[^0-9.]", "");
+            }
+            // Parse the totalAmountString to a float then return it
             return Float.parseFloat(totalAmountString);
-        }
-        else {
+        } else {
             return 0.0f;
         }
     }
 
-    private void displayTotalAmount(float amount) {
+    public void displayTotalAmount (float amount) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setCurrencySymbol("₱");
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##", symbols);
         String formattedTotalAmount = "₱" + decimalFormat.format(amount);
 
+        int color;
+        if (amount >= 0) {
+            color = Color.parseColor("#AEF395");
+        } else {
+            color = Color.parseColor("#A91B0D");
+        }
+
         tv_totalAmount.setText(formattedTotalAmount);
+        tv_totalAmount.setTextColor(color);
     }
 
     public void editPerson(int position) {
@@ -219,7 +273,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
         i.putExtra("edit", position);
         i.putExtra("name", p.getExpenseName());
-        i.putExtra("age", p.getAmount());
+        i.putExtra("amount", p.getAmount());
         i.putExtra("date", p.getDate());
 
         startActivity(i);
@@ -431,32 +485,33 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         if (incomingMessages != null) {
             String expenseName = incomingMessages.getString("name");
             float amount = incomingMessages.getFloat("amount", 0.0f);
-            int positionEdited = incomingMessages.getInt("edit");
+            int positionEdited = incomingMessages.getInt("edit", -1);
             String dateString = incomingMessages.getString("date");
-            boolean setReminder = incomingMessages.getBoolean("setReminder");
+            boolean setReminder = incomingMessages.getBoolean("setReminder", false);
 
-            if (positionEdited > -1) {
-                    // Remove the item at the specified position if it is an edit operation
+
+            if (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size()) {
+                // Remove the item at the specified position if it is an edit operation
                 myExpenses.getMyExpenseList().remove(positionEdited);
-            }
 
-            boolean itemExistInHistory = false;
-            for (History history : myHistoryExpenses.getMyExpenseList2()) {
-                if (history.getExpenseName().equals(expenseName)
-                        && history.getAmount() == amount
-                        && history.getDate().equals(dateString)) {
-                    itemExistInHistory = true;
-                    myHistoryExpenses.getMyExpenseList2().remove(history);
-                    break;
-                }
-            }
+                Expense e = new Expense(expenseName, amount, dateString);
+                myExpenses.getMyExpenseList().add(positionEdited, e);
+                //Expense existingExpense = myExpenses.getMyExpenseList().get(positionEdited);
+               // existingExpense.setExpenseName(expenseName);
+                //existingExpense.setAmount(amount);
+                //existingExpense.setDate(dateString);
 
-            if (!itemExistInHistory) {
+            } else {
                 Expense e = new Expense(expenseName, amount, dateString);
                 myExpenses.getMyExpenseList().add(e);
-                expenseAdapter.notifyDataSetChanged();
-                saveExpensesToSharedPreferences(myExpenses.getMyExpenseList());
             }
+
+            //Expense e = new Expense(expenseName, amount, dateString);
+            //myExpenses.getMyExpenseList().add(e);
+            //expenseAdapter.notifyDataSetChanged();
+            expenseAdapter.notifyDataSetChanged();
+            saveExpensesToSharedPreferences(myExpenses.getMyExpenseList());
+            saveHistoryToSharedPreferences(myHistoryExpenses.getMyExpenseList2());
 
             if (setReminder) {
                 setAlarmManager(dateString);
@@ -464,8 +519,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 
-    private void setAlarmManager(String dateString) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+    private void setAlarmManager (String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         try {
             Date dueDate = sdf.parse(dateString);
             long dueDateMillis = dueDate.getTime();
@@ -488,4 +543,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 }
+
+
 

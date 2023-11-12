@@ -28,7 +28,6 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
 
     Button btn_ok;
     ImageButton btn_cancel;
-    TextView text1;
     EditText et_expensename, et_amount, et_date;
     CheckBox cbox_setReminder;
     Spinner spin_sign;
@@ -74,13 +73,23 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
 
         if (incomingIntent != null) {
             String expenseName = incomingIntent.getString("name");
-            float amount = incomingIntent.getFloat("age", 0.0f);
+            float amount = incomingIntent.getFloat("amount", 0.0f);
+
+            if (amount < 0) {
+                spin_sign.setSelection(1);
+            } else {
+                spin_sign.setSelection(0);
+            }
+
             String date = incomingIntent.getString("date");
             positionToEdit = incomingIntent.getInt("edit");
+            boolean setReminder = incomingIntent.getBoolean("setReminder", false);
             // fill in the form
             et_expensename.setText(expenseName);
             et_date.setText(date);
-            et_amount.setText(Float.toString((float) amount));
+            et_amount.setText(String.valueOf(Math.abs(amount)));
+            cbox_setReminder.setChecked(setReminder);
+            // et_amount.setText(Float.toString((float) amount));
 
         }
 
@@ -112,11 +121,19 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     // put strings into a message for MainActivity
                     Intent i = new Intent(view.getContext(), MainPage.class);
 
-                    i.putExtra("edit", positionToEdit);
+
+                    //i.putExtra("edit", positionToEdit);
                     i.putExtra("name", newName);
                     i.putExtra("amount", addAmount());
                     i.putExtra("date", newDate);
                     i.putExtra("setReminder", setReminder);
+
+                    if (positionToEdit > -1) {
+                        i.putExtra("edit", positionToEdit);
+                    } //else {
+                        //i.putExtra("edit", -1);
+                    //}
+
 
                     // start main Activity again
                     startActivity(i);
@@ -128,6 +145,8 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     builder.setMessage("Please enter a valid number for the amount field.");
                     builder.setPositiveButton("OK", null);
                     builder.show();
+
+
                 }
             }
         });
@@ -144,18 +163,26 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
     private float addAmount() {
         String selectedSign = spin_sign.getSelectedItem().toString();
         String amountString = et_amount.getText().toString();
+        float amount = 0.0f;
 
         if (!amountString.isEmpty()) {
-            float amount = Float.parseFloat(amountString);
+            try {
+                amount = Float.parseFloat(amountString);
 
-            if ("-".equals(selectedSign)) {
-                amount = -amount;
+                if ("-".equals(selectedSign)) {
+                    amount = -Math.abs(amount);
+                }
+                return amount;
+            } catch (NumberFormatException e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewTrackerForm.this);
+                builder.setCancelable(false);
+                builder.setTitle("Input Error!");
+                builder.setMessage("Please enter a valid number for the amount field.");
+                builder.setPositiveButton("OK", null);
+                builder.show();
             }
-
-            return amount;
-        } else {
-            return 0.0f;
         }
+        return 0.0f;
     }
 
     @Override
