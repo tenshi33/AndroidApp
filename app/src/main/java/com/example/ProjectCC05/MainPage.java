@@ -73,6 +73,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         btn_subtractBalance = findViewById(R.id.btn_subtractBalance);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
+
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
 
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
@@ -86,6 +87,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         displayTotalAmount(savedTotal);
 
         lv_listOfExpenses.setAdapter(expenseAdapter);
+
         // Calling the method for adding new items
         addNewItem();
 
@@ -271,10 +273,12 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         // get the contents of person at position
         Expense p = myExpenses.getMyExpenseList().get(position);
 
+
         i.putExtra("edit", position);
         i.putExtra("name", p.getExpenseName());
         i.putExtra("amount", p.getAmount());
         i.putExtra("date", p.getDate());
+        i.putExtra("setReminder", p.isSetReminder());
 
         startActivity(i);
     }
@@ -490,25 +494,18 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             boolean setReminder = incomingMessages.getBoolean("setReminder", false);
 
 
-            if (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size()) {
+            if (positionEdited > -1 /*&& positionEdited < myExpenses.getMyExpenseList().size()*/) {
                 // Remove the item at the specified position if it is an edit operation
-                myExpenses.getMyExpenseList().remove(positionEdited);
+                //myExpenses.getMyExpenseList().remove(positionEdited);
 
                 Expense e = new Expense(expenseName, amount, dateString);
-                myExpenses.getMyExpenseList().add(positionEdited, e);
-                //Expense existingExpense = myExpenses.getMyExpenseList().get(positionEdited);
-               // existingExpense.setExpenseName(expenseName);
-                //existingExpense.setAmount(amount);
-                //existingExpense.setDate(dateString);
+                myExpenses.getMyExpenseList().set(positionEdited, e);
 
             } else {
                 Expense e = new Expense(expenseName, amount, dateString);
                 myExpenses.getMyExpenseList().add(e);
             }
 
-            //Expense e = new Expense(expenseName, amount, dateString);
-            //myExpenses.getMyExpenseList().add(e);
-            //expenseAdapter.notifyDataSetChanged();
             expenseAdapter.notifyDataSetChanged();
             saveExpensesToSharedPreferences(myExpenses.getMyExpenseList());
             saveHistoryToSharedPreferences(myHistoryExpenses.getMyExpenseList2());
@@ -516,6 +513,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             if (setReminder) {
                 setAlarmManager(dateString);
             }
+
+            positionEdited = -1;
         }
     }
 

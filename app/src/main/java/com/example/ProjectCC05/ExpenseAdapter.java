@@ -5,6 +5,7 @@ import static java.util.Collections.addAll;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,15 @@ public class ExpenseAdapter extends BaseAdapter {
         TextView tv_expenseName = oneExpenseLine.findViewById(R.id.tv_expensename);
         TextView tv_amount = oneExpenseLine.findViewById(R.id.tv_amountvalue);
         TextView tv_date = oneExpenseLine.findViewById(R.id.tv_date);
+
+        Expense currentExpense = getItem(position);
+
+        tv_amount.setText(String.valueOf(currentExpense.getAmount()));
+        if (currentExpense.getAmount() >= 0) {
+            tv_amount.setTextColor(Color.parseColor("#AEF395"));
+        } else {
+            tv_amount.setTextColor(Color.parseColor("#A91B0D"));
+        }
 
         Expense p = this.getItem(position);
 

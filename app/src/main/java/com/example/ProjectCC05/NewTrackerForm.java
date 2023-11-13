@@ -96,7 +96,6 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 try {
                     // get strings from et_ view objects
                     String newName = et_expensename.getText().toString();
@@ -104,7 +103,6 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     String newDate = et_date.getText().toString();
                     Float newAmountFloat = Float.parseFloat(newAmount);
                     boolean setReminder = cbox_setReminder.isChecked();
-
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
                         Date parsedDate = sdf.parse(newDate);
@@ -117,11 +115,8 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                         builder.show();
                         return;
                     }
-
                     // put strings into a message for MainActivity
                     Intent i = new Intent(view.getContext(), MainPage.class);
-
-
                     //i.putExtra("edit", positionToEdit);
                     i.putExtra("name", newName);
                     i.putExtra("amount", addAmount());
@@ -130,10 +125,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
 
                     if (positionToEdit > -1) {
                         i.putExtra("edit", positionToEdit);
-                    } //else {
-                        //i.putExtra("edit", -1);
-                    //}
-
+                    }
 
                     // start main Activity again
                     startActivity(i);
@@ -145,8 +137,6 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     builder.setMessage("Please enter a valid number for the amount field.");
                     builder.setPositiveButton("OK", null);
                     builder.show();
-
-
                 }
             }
         });
