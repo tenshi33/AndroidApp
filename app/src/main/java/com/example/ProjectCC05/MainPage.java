@@ -53,6 +53,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     HistoryAdapter historyAdapter;
     MyExpenses myExpenses;
     MyHistoryExpenses myHistoryExpenses;
+    private int positionEdited = -1;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -273,12 +274,13 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         // get the contents of person at position
         Expense p = myExpenses.getMyExpenseList().get(position);
 
-
-        i.putExtra("edit", position);
+        positionEdited = position;
+        i.putExtra("edit", positionEdited);
         i.putExtra("name", p.getExpenseName());
         i.putExtra("amount", p.getAmount());
         i.putExtra("date", p.getDate());
         i.putExtra("setReminder", p.isSetReminder());
+
 
         startActivity(i);
     }
@@ -410,7 +412,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     String expenseName = jsonExpense.getString("expenseName");
                     float amount = (float) jsonExpense.getDouble("amount");
                     String dateString = jsonExpense.getString("dateString");
-                    Expense loadedExpense = new Expense(expenseName, amount, dateString);
+                    boolean setReminder = jsonExpense.getBoolean("setReminder");
+                    Expense loadedExpense = new Expense(expenseName, amount, dateString, setReminder);
                     myExpenses.getMyExpenseList().add(loadedExpense);
                 }
 
@@ -438,6 +441,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                     String expenseName = jsonExpense.getString("expenseName");
                     float amount = (float) jsonExpense.getDouble("amount");
                     String dateString = jsonExpense.getString("dateString");
+                    boolean setReminder = jsonExpense.getBoolean("setReminder");
 
                     // Check if the loaded expense matches the one to be removed
                     if (history.getExpenseName().equals(expenseName)
@@ -469,6 +473,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 jsonExpense.put("expenseName", expense.getExpenseName());
                 jsonExpense.put("amount", expense.getAmount());
                 jsonExpense.put("dateString", expense.getDate());
+                jsonExpense.put("setReminder", expense.isSetReminder());
                 jsonArray.put(jsonExpense);
             }
 
@@ -489,20 +494,20 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         if (incomingMessages != null) {
             String expenseName = incomingMessages.getString("name");
             float amount = incomingMessages.getFloat("amount", 0.0f);
-            int positionEdited = incomingMessages.getInt("edit", -1);
+            positionEdited = incomingMessages.getInt("edit", -1);
             String dateString = incomingMessages.getString("date");
             boolean setReminder = incomingMessages.getBoolean("setReminder", false);
 
 
-            if (positionEdited > -1 /*&& positionEdited < myExpenses.getMyExpenseList().size()*/) {
+            if (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size()) {
                 // Remove the item at the specified position if it is an edit operation
                 //myExpenses.getMyExpenseList().remove(positionEdited);
 
-                Expense e = new Expense(expenseName, amount, dateString);
+                Expense e = new Expense(expenseName, amount, dateString, setReminder);
                 myExpenses.getMyExpenseList().set(positionEdited, e);
 
             } else {
-                Expense e = new Expense(expenseName, amount, dateString);
+                Expense e = new Expense(expenseName, amount, dateString, setReminder);
                 myExpenses.getMyExpenseList().add(e);
             }
 

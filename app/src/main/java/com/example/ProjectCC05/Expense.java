@@ -9,11 +9,12 @@ public class Expense extends History implements Comparable<Expense> {
     private String date;
     private boolean setReminder;
 
-    public Expense(String expenseName, float amount, String date) {
+    public Expense(String expenseName, float amount, String date, boolean setReminder) {
         super(expenseName, amount, date);
         this.expenseName = expenseName;
         this.amount = amount;
         this.date = date;
+        this.setReminder = setReminder;
     }
 
     // compareTo for sorting
@@ -27,9 +28,6 @@ public class Expense extends History implements Comparable<Expense> {
         return setReminder;
     }
 
-    public void setSetReminder(boolean setReminder) {
-        this.setReminder = setReminder;
-    }
 }
 
 
