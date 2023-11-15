@@ -211,6 +211,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                         removeItemFromSharedPreferences((History) selectedItem);
                         expenseAdapter.notifyDataSetChanged();
                         historyAdapter.notifyDataSetChanged();
+
                     }
                 });
                 builder.setNegativeButton("NO", null);
@@ -218,6 +219,10 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 return true;
             }
         });
+    }
+
+    private void connectedBalances () {
+
     }
 
     private void saveTotalAmount (float amount) {
@@ -498,6 +503,17 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             String dateString = incomingMessages.getString("date");
             boolean setReminder = incomingMessages.getBoolean("setReminder", false);
 
+            float amountToAdd = Math.abs(amount);
+
+            if (amount >= 0) {
+                float newTotal = getTotalAmount() + amountToAdd;
+                saveTotalAmount(newTotal);
+                displayTotalAmount(newTotal);
+            } else {
+                float newTotal = getTotalAmount() - amountToAdd;
+                saveTotalAmount(newTotal);
+                displayTotalAmount(newTotal);
+            }
 
             if (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size()) {
                 // Remove the item at the specified position if it is an edit operation
