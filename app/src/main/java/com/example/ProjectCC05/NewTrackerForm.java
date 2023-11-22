@@ -3,8 +3,11 @@ package com.example.ProjectCC05;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import java.text.ParseException;
@@ -46,31 +50,13 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_tracker_form);
 
-        btn_ok = findViewById(R.id.btn_ok);
-        btn_cancel = findViewById(R.id.btn_cancel);
-        et_amount = findViewById(R.id.et_amount);
-        et_expensename = findViewById(R.id.et_expensename);
-        et_date = findViewById(R.id.et_date);
-        cbox_setReminder = findViewById(R.id.cbox_setReminder);
-        spin_sign = findViewById(R.id.spin_sign);
-        // This is the array for the positive + and negative - signs in the amount value.
-        CharSequence[] items = getResources().getTextArray(R.array.signs);
-        RightAlignedSpinnerAdapter signAdapter = new RightAlignedSpinnerAdapter(
-                this,
-                android.R.layout.simple_spinner_item,
-                items);
-        signAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_sign.setAdapter(signAdapter);
+        color();
+        initializers();
+        onClickListeners();
+        incomingIntent();
+    }
 
-        // If date field is clicked, a calendar will pop-up using the DatePickerDialogFragment.class
-        et_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment datePicker = new DatePickerDialogFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
-            }
-        });
-
+    private void incomingIntent() {
         // Listen for incoming data. This will fill out the form if the item was tapped to edit.
         Bundle incomingIntent = getIntent().getExtras();
 
@@ -93,7 +79,17 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             et_amount.setText(String.valueOf(Math.abs(amount)));
             cbox_setReminder.setChecked(setReminder);
         }
+    }
 
+    private void onClickListeners() {
+        // If date field is clicked, a calendar will pop-up using the DatePickerDialogFragment.class
+        et_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker = new DatePickerDialogFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
         // This will send the values of the fields into the MainPage's listview.
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +139,6 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                 }
             }
         });
-
         // Cancels the NewTrackerForm and goes back to the MainPage
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +146,30 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                 finish();
             }
         });
-
+    }
+    private void initializers() {
+        btn_ok = findViewById(R.id.btn_ok);
+        btn_cancel = findViewById(R.id.btn_cancel);
+        et_amount = findViewById(R.id.et_amount);
+        et_expensename = findViewById(R.id.et_expensename);
+        et_date = findViewById(R.id.et_date);
+        cbox_setReminder = findViewById(R.id.cbox_setReminder);
+        spin_sign = findViewById(R.id.spin_sign);
+        // This is the array for the positive + and negative - signs in the amount value.
+        CharSequence[] items = getResources().getTextArray(R.array.signs);
+        RightAlignedSpinnerAdapter signAdapter = new RightAlignedSpinnerAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                items);
+        signAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sign.setAdapter(signAdapter);
+    }
+    private void color() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue));
+        }
     }
 
    // To parse the value into amount and negate its absolute value if "-" sign is selected.

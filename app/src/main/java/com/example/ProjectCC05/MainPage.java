@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +65,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
 
+        // Calls the method for coloring the status bar
+        color();
         // Calling the method for initialization and finding the variables based on their ID on the xml
         initializers();
         // Loading and displaying data saved from the SharedPreferences
@@ -70,7 +75,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         displayTotalAmount(savedTotal);
         // This array contains the spin_sort where the sort method is located
         spinSortArray();
-        // Creates NotificationChannel if Android version is Oreo and above. This is required.
+        // Calling the method for creating NotificationChannel.
         oreoAndAbove();
         // Calling the method for adding new items
         addNewItem();
@@ -78,6 +83,14 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         onClickListeners();
     }
 
+    // Sets the status bar color with the same color as the background
+    private void color() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue));
+        }
+    }
     // Initialization and finding the variables based on their ID on the xml
     private void initializers() {
         btn_home = (ImageButton) findViewById(R.id.btn_home);
@@ -101,8 +114,8 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         lv_listOfExpenses.setAdapter(expenseAdapter);
     }
 
+    // All the .onClickListeners of the buttons and items in the MainPage
     private void onClickListeners() {
-
         // Button for starting the HistoryPage.class
         btn_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +255,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         });
     }
 
+    // Creates NotificationChannel if Android version is Oreo and above. This is required.
     private void oreoAndAbove() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("expense_channel_id", "Expense Notifications", NotificationManager.IMPORTANCE_DEFAULT);
@@ -584,18 +598,24 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             positionEdited = incomingMessages.getInt("edit", -1);
             String dateString = incomingMessages.getString("date");
             boolean setReminder = incomingMessages.getBoolean("setReminder", false);
+            // Check if the amount has changed
+            float oldAmount = (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size())
+                    ? myExpenses.getMyExpenseList().get(positionEdited).getAmount()
+                    : 0.0f;
 
-            // For adding or subtracting the value of amount to the balance
-            float amountToAdd = Math.abs(amount);
-            if (amount >= 0) {
-                float newTotal = getTotalAmount() + amountToAdd;
-                saveTotalAmount(newTotal);
-                displayTotalAmount(newTotal);
-            } else {
-                float newTotal = getTotalAmount() - amountToAdd;
+            if (amount != oldAmount) {
+                // Adjust the total balance only if the amount has changed
+                float amountToAdd = Math.abs(amount - oldAmount);
+                float newTotal;
+                if (amount >= 0) {
+                    newTotal = getTotalAmount() + amountToAdd;
+                } else {
+                    newTotal = getTotalAmount() - amountToAdd;
+                }
                 saveTotalAmount(newTotal);
                 displayTotalAmount(newTotal);
             }
+
 
             if (positionEdited > -1 && positionEdited < myExpenses.getMyExpenseList().size()) {
                 // Remove the item at the specified position if it is an edit operation

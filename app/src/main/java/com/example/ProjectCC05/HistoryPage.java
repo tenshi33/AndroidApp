@@ -3,8 +3,11 @@ package com.example.ProjectCC05;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -12,6 +15,7 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,15 +35,13 @@ public class HistoryPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_page);
 
-        myHistoryExpenses = ((MyApplication) this.getApplication()).getMyExpenses2();
-        btn_back = findViewById(R.id.btn_back);
-        lv_historyOfExpenses = findViewById(R.id.lv_historyOfExpenses);
-        historyAdapter = new HistoryAdapter(HistoryPage.this, myHistoryExpenses);
-        // For loading the data in the SharedPreferences
-        myHistoryExpenses.getMyHistoryList().clear();
-        myHistoryExpenses.getMyHistoryList().addAll(getHistoryFromSharedPreferences());
-        lv_historyOfExpenses.setAdapter(historyAdapter);
+        color();
+        initializers();
+        onClickListeners();
 
+    }
+
+    private void onClickListeners() {
         // Deleting an Item on the history listview using long click after confirming with the AlertDialog
         lv_historyOfExpenses.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -49,7 +51,6 @@ public class HistoryPage extends AppCompatActivity {
                 builder.setTitle("Delete Item From History");
                 builder.setMessage("Do you want to delete this item from the history? You will not be able to " +
                         "recover this item after deletion.");
-
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -83,6 +84,23 @@ public class HistoryPage extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    private void initializers() {
+        myHistoryExpenses = ((MyApplication) this.getApplication()).getMyExpenses2();
+        btn_back = findViewById(R.id.btn_back);
+        lv_historyOfExpenses = findViewById(R.id.lv_historyOfExpenses);
+        historyAdapter = new HistoryAdapter(HistoryPage.this, myHistoryExpenses);
+        // For loading the data in the SharedPreferences
+        myHistoryExpenses.getMyHistoryList().clear();
+        myHistoryExpenses.getMyHistoryList().addAll(getHistoryFromSharedPreferences());
+        lv_historyOfExpenses.setAdapter(historyAdapter);
+    }
+    private void color() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.blue));
+        }
     }
 
     /*
