@@ -3,6 +3,7 @@ package com.example.ProjectCC05;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -154,6 +155,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         et_expensename = findViewById(R.id.et_expensename);
         et_date = findViewById(R.id.et_date);
         cbox_setReminder = findViewById(R.id.cbox_setReminder);
+        cbox_setReminder.setTextColor(Color.BLACK);
         spin_sign = findViewById(R.id.spin_sign);
         // This is the array for the positive + and negative - signs in the amount value.
         CharSequence[] items = getResources().getTextArray(R.array.signs);

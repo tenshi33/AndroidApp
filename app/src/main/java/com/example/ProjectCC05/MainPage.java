@@ -39,6 +39,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -265,9 +266,9 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     }
     // This array contains the spin_sort where the sort method is located
     private void spinSortArray() {
-        ArrayAdapter<CharSequence> arr = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
-        arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_sort.setAdapter(arr);
+        SortAdapter sortAdapter = new SortAdapter(this, android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.sort)));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sort.setAdapter(sortAdapter);
         spin_sort.setOnItemSelectedListener(this);
     }
 
