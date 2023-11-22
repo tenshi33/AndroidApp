@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class HistoryAdapter extends BaseAdapter {
 
-    // History
+    // The same as ExpenseAdapter. The custom adapter for the History
     Activity mActivity;
     MyHistoryExpenses myHistoryExpenses;
 
@@ -39,38 +39,23 @@ public class HistoryAdapter extends BaseAdapter {
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View view, ViewGroup vG) {
-
+         /*
+            The LayoutInflater inflater is used as a way to get the information of the UI in the tracker_one_line.xml
+            As the name suggests, it automatically layouts the variables located in the xml to the lv_listOfExpenses
+         */
         View oneHistoryLine;
 
-        //Creates an inflater associated with the activity
         LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         oneHistoryLine = inflater.inflate(R.layout.history_one_line, vG, false);
 
         TextView tv_expenseName = oneHistoryLine.findViewById(R.id.tv_historyExpenseName);
         TextView tv_amount = oneHistoryLine.findViewById(R.id.tv_historyAmountValue);
-        // ImageView iv_icon = oneExpenseLine.findViewById(R.id.iv_tracker_icon);
         TextView tv_date = oneHistoryLine.findViewById(R.id.tv_historyDate);
 
-
-
         History p = this.getItem(position);
-
         tv_expenseName.setText(p.getExpenseName());
         tv_amount.setText(Integer.toString((int) p.getAmount()));
         tv_date.setText(p.getDate());
-
-        /*
-        int icon_resource_numbers [] = {
-                R.drawable.car_loan_icon, //1
-                R.drawable.debt_icon, // 2
-                R.drawable.electricity_icon, // 3
-                R.drawable.graduation_cap_icon, // 4
-                R.drawable.netflix_icon, // 5
-                R.drawable.rent_icon, // 6
-                R.drawable.water_icon // 7
-        };
-        iv_icon.setImageResource(icon_resource_numbers[position]);
-        */
 
         return oneHistoryLine;
     }

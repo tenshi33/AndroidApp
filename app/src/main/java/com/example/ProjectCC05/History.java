@@ -2,27 +2,26 @@ package com.example.ProjectCC05;
 
 public class History {
 
-// History
+      /*
+        This is the class that contains all variables in the lv_historyOfExpenses list. Namely, the expenseName,
+        amount, date, and setReminder. Removing one will cause an error, and adding one will
+        require lots of changes.
+     */
 
     private String expenseName;
     private float amount;
-    //private int pictureNumber2;
-
     public String getDate() {
         return date;
     }
 
     private String date;
 
-    public History(String expenseName, float amount, /* int pictureNumber, */ String date) {
-         // super(expenseName, amount, date);
+    public History(String expenseName, float amount, String date) {
          this.expenseName = expenseName;
          this.amount = amount;
-         //this.pictureNumber = pictureNumber;
          this.date = date;
 
     }
-
 
     // compareTo for sorting
     public int compareTo(History history) {
@@ -44,15 +43,6 @@ public class History {
     public void setAmount(float amount) {
         this.amount = amount;
     }
-    /*
-    public int getPictureNumber() {
-        return pictureNumber2;
-    }
-
-    public void setPictureNumber(int pictureNumber2) {
-        this.pictureNumber2 = pictureNumber2;
-    }
-    */
 
     public void setDate(String date) {
         this.date = date;

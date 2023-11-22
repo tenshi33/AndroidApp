@@ -36,6 +36,10 @@ public class LoginPage extends AppCompatActivity {
         et_password = findViewById(R.id.et_password);
         loginbtn = findViewById(R.id.loginbtn);
 
+        /*
+            If the credentials the user inputted is the same as the one they input in the register,
+            then they are redirected to the MainPage.class. Else, it shows a message saying Login Failed.
+         */
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,13 +61,6 @@ public class LoginPage extends AppCompatActivity {
                 }
             }
         });
-
-
-    }
-
-    public void openActivity2() {
-        Intent intent = new Intent(this, MainPage.class);
-        startActivity(intent);
     }
 
     public void onBackPressed() {

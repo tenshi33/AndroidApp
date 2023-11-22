@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+    // This is the MainPage where all the activity is connected, and major parts of the code is focused in here
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
@@ -67,6 +68,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             notificationManager.createNotificationChannel(channel);
         }
 
+        // Initialization and finding the variables based on their ID on the xml
         btn_home = (ImageButton) findViewById(R.id.btn_home);
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
@@ -74,19 +76,21 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         btn_subtractBalance = findViewById(R.id.btn_subtractBalance);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
-
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
-
+        /*
+            The getMyExpense() and getMyExpenses2() methods are called on the MyApplication object to retrieve two lists of expenses.
+            These lists are then assigned to the myExpenses and myHistoryExpenses variables.
+         */
         myExpenses = ((MyApplication) this.getApplication()).getMyExpense();
         myHistoryExpenses = ((MyApplication) this.getApplication()).getMyExpenses2();
+        // Instantiation the custom adapters
         expenseAdapter = new ExpenseAdapter(MainPage.this, myExpenses);
         historyAdapter = new HistoryAdapter(MainPage.this, myHistoryExpenses);
-        // Loading and displaying data from the SharedPreferences
+        // Loading and displaying data saved from the SharedPreferences
         loadAndDisplayData();
-
         float savedTotal = getSavedTotalAmount();
         displayTotalAmount(savedTotal);
-
+        // Setting the adapter for the lv_listOfExpenses
         lv_listOfExpenses.setAdapter(expenseAdapter);
 
         // Calling the method for adding new items

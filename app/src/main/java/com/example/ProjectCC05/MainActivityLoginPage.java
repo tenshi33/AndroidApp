@@ -10,6 +10,12 @@ public class MainActivityLoginPage extends AppCompatActivity {
     private Button registerButton;
     private Button loginButton;
 
+    /*
+        This activity is the starting activity of the Application.
+        It only has 2 buttons as the UI and the background.
+        These buttons redirect you to either LoginPage or the SignUpPage.
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

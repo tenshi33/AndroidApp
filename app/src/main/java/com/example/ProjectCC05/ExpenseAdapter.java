@@ -19,6 +19,13 @@ import java.util.List;
 
 public class ExpenseAdapter extends BaseAdapter {
 
+    /*
+        The custom adapter for the Expense.
+        The ExpenseAdapter class is designed to serve as a custom adapter for
+        handling the display of expense-related data.
+        It is initialized with references to the activity and the data it will adapt.
+     */
+
     Activity mActivity;
 
     MyExpenses myExpenses;
@@ -47,6 +54,10 @@ public class ExpenseAdapter extends BaseAdapter {
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View view, ViewGroup vG) {
+        /*
+            The LayoutInflater inflater is used as a way to get the information of the UI in the tracker_one_line.xml
+            As the name suggests, it automatically layouts the variables located in the xml to the lv_listOfExpenses
+         */
         View oneExpenseLine;
 
         LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
