@@ -3,6 +3,7 @@ package com.example.ProjectCC05;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,15 @@ public class HistoryAdapter extends BaseAdapter {
         TextView tv_expenseName = oneHistoryLine.findViewById(R.id.tv_historyExpenseName);
         TextView tv_amount = oneHistoryLine.findViewById(R.id.tv_historyAmountValue);
         TextView tv_date = oneHistoryLine.findViewById(R.id.tv_historyDate);
+
+        History currentHistory = getItem(position);
+
+        tv_amount.setText(String.valueOf(currentHistory.getAmount()));
+        if (currentHistory.getAmount() >= 0) {
+            tv_amount.setTextColor(Color.parseColor("#AEF395"));
+        } else {
+            tv_amount.setTextColor(Color.parseColor("#A91B0D"));
+        }
 
         History p = this.getItem(position);
         tv_expenseName.setText(p.getExpenseName());
