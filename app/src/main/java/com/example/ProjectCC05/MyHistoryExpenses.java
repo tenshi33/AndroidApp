@@ -6,23 +6,23 @@ import java.util.List;
 
 public class MyHistoryExpenses {
 
-    // History
-    List<History> myExpenseList2;
+    // The list for the HistoryPage. See MyExpenses.class for more information
+    List<History> myHistoryList;
 
-    public MyHistoryExpenses(List<History> myExpenseList) {
-        this.myExpenseList2 = myExpenseList2;
+    public MyHistoryExpenses(List<History> myHistoryList) {
+        this.myHistoryList = myHistoryList;
     }
 
     public MyHistoryExpenses(){
-        this.myExpenseList2 = new ArrayList<>();
+        this.myHistoryList = new ArrayList<>();
     }
 
-    public List<History> getMyExpenseList2() {
-        return myExpenseList2;
+    public List<History> getMyHistoryList() {
+        return myHistoryList;
     }
 
-    public void setMyExpenseList(List<History> myExpenseList2) {
-        this.myExpenseList2 = myExpenseList2;
+    public void setMyExpenseList(List<History> myHistoryList) {
+        this.myHistoryList = myHistoryList;
     }
 
 }

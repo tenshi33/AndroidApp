@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
+    // Supposedly for aligning the spin_sign values into the right. But Changed it into the middle
 public class RightAlignedSpinnerAdapter extends ArrayAdapter<CharSequence> {
 
     public RightAlignedSpinnerAdapter (Context context, int resource, CharSequence[] objects) {

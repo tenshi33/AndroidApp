@@ -26,6 +26,12 @@ import java.util.Locale;
 
 public class NewTrackerForm extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    /*
+        This is class is where we add new Items in the lv_listOfExpenses in the MainPage.class.
+        In here, we put the values on the et_expensename, et_amount, and et_date, as well as whether
+        the cbox_setReminder is checked or not. After clicking the btn_ok, it transfers the data to the
+        MainPage using the i.putExtra of the Intent.
+     */
     Button btn_ok;
     ImageButton btn_cancel;
     EditText et_expensename, et_amount, et_date;
@@ -47,8 +53,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         et_date = findViewById(R.id.et_date);
         cbox_setReminder = findViewById(R.id.cbox_setReminder);
         spin_sign = findViewById(R.id.spin_sign);
-
-
+        // This is the array for the positive + and negative - signs in the amount value.
         CharSequence[] items = getResources().getTextArray(R.array.signs);
         RightAlignedSpinnerAdapter signAdapter = new RightAlignedSpinnerAdapter(
                 this,
@@ -57,8 +62,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         signAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_sign.setAdapter(signAdapter);
 
-
-
+        // If date field is clicked, a calendar will pop-up using the DatePickerDialogFragment.class
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,8 +71,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             }
         });
 
-        // listen for incoming data
-
+        // Listen for incoming data. This will fill out the form if the item was tapped to edit.
         Bundle incomingIntent = getIntent().getExtras();
 
         if (incomingIntent != null) {
@@ -89,10 +92,9 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             et_date.setText(date);
             et_amount.setText(String.valueOf(Math.abs(amount)));
             cbox_setReminder.setChecked(setReminder);
-            // et_amount.setText(Float.toString((float) amount));
-
         }
 
+        // This will send the values of the fields into the MainPage's listview.
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +105,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     String newDate = et_date.getText().toString();
                     Float newAmountFloat = Float.parseFloat(newAmount);
                     boolean setReminder = cbox_setReminder.isChecked();
+                    // If date is not in correct format, it will show an error.
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
                         Date parsedDate = sdf.parse(newDate);
@@ -130,7 +133,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                     // start main Activity again
                     startActivity(i);
                 } catch (NumberFormatException e) {
-                    // To show an error when an input mismatch error occurred
+                    // To show an error when the user inputted string or character on the amount field
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewTrackerForm.this);
                     builder.setCancelable(false);
                     builder.setTitle("Input Error!");
@@ -141,6 +144,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
             }
         });
 
+        // Cancels the NewTrackerForm and goes back to the MainPage
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,6 +154,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
 
     }
 
+   // To parse the value into amount and negate its absolute value if "-" sign is selected.
     private float addAmount() {
         String selectedSign = spin_sign.getSelectedItem().toString();
         String amountString = et_amount.getText().toString();
@@ -164,6 +169,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
                 }
                 return amount;
             } catch (NumberFormatException e) {
+                // If it cannot be parsed, shows an error.
                 AlertDialog.Builder builder = new AlertDialog.Builder(NewTrackerForm.this);
                 builder.setCancelable(false);
                 builder.setTitle("Input Error!");
@@ -175,6 +181,7 @@ public class NewTrackerForm extends AppCompatActivity implements DatePickerDialo
         return 0.0f;
     }
 
+    // After pressing the date on the calendar, the date selected will be inputted automatically in the field.
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();

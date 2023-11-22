@@ -36,8 +36,8 @@ public class HistoryPage extends AppCompatActivity {
         lv_historyOfExpenses = findViewById(R.id.lv_historyOfExpenses);
         historyAdapter = new HistoryAdapter(HistoryPage.this, myHistoryExpenses);
         // For loading the data in the SharedPreferences
-        myHistoryExpenses.getMyExpenseList2().clear();
-        myHistoryExpenses.getMyExpenseList2().addAll(getHistoryFromSharedPreferences());
+        myHistoryExpenses.getMyHistoryList().clear();
+        myHistoryExpenses.getMyHistoryList().addAll(getHistoryFromSharedPreferences());
         lv_historyOfExpenses.setAdapter(historyAdapter);
 
         // Deleting an Item on the history listview using long click after confirming with the AlertDialog
@@ -54,11 +54,11 @@ public class HistoryPage extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Get the position of the item
-                        History selectedExpense = myHistoryExpenses.getMyExpenseList2().get(position);
+                        History selectedExpense = myHistoryExpenses.getMyHistoryList().get(position);
                         // Remove the item from the SharedPreferences
                         removeItemFromHistorySharedPreferences(selectedExpense);
                         // Remove the item from the list
-                        myHistoryExpenses.getMyExpenseList2().remove(selectedExpense);
+                        myHistoryExpenses.getMyHistoryList().remove(selectedExpense);
                         // Update the list. notifyDataSetChanged somehow not working.
                         historyAdapter = new HistoryAdapter(HistoryPage.this, myHistoryExpenses);
                         lv_historyOfExpenses.setAdapter(historyAdapter);

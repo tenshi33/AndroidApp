@@ -4,6 +4,12 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
+    /*
+        For maintaining Global State
+        It allows us to store data that needs to persist across different
+        activities in the app.
+     */
+
     private MyExpenses myExpense = new MyExpenses();
     private MyHistoryExpenses myHistoryExpenses = new MyHistoryExpenses();
 

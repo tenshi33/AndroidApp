@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SignUpPage extends AppCompatActivity {
 
+    // SignUp page. The user inputs their credentials, and then it will be used to log in into the app.
     private EditText et_usernameRegister, et_passwordRegister;
     private Button btn_register;
 
@@ -45,6 +47,8 @@ public class SignUpPage extends AppCompatActivity {
                 editor.putString("password", password);
                 editor.apply();
 
+                Toast.makeText(SignUpPage.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent (SignUpPage.this, LoginPage.class);
                 startActivity(intent);
             }
@@ -52,7 +56,6 @@ public class SignUpPage extends AppCompatActivity {
 
 
     }
-
 
     public void openSignInPage() {
         Intent intent = new Intent(this, LoginPage.class);

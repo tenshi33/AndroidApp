@@ -22,12 +22,12 @@ public class HistoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return myHistoryExpenses.getMyExpenseList2().size();
+        return myHistoryExpenses.getMyHistoryList().size();
     }
 
     @Override
     public History getItem(int position) {
-        return myHistoryExpenses.getMyExpenseList2().get(position);
+        return myHistoryExpenses.getMyHistoryList().get(position);
 
     }
 

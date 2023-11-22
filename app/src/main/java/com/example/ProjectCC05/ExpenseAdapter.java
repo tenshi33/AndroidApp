@@ -78,6 +78,7 @@ public class ExpenseAdapter extends BaseAdapter {
 
         Expense p = this.getItem(position);
 
+        // For setting the decimal format with the currency sign
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setCurrencySymbol("₱");
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##", symbols);
