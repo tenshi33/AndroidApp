@@ -62,13 +62,24 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_page);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("expense_channel_id", "Expense Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        // Calling the method for initialization and finding the variables based on their ID on the xml
+        initializers();
+        // Loading and displaying data saved from the SharedPreferences
+        loadAndDisplayData();
+        float savedTotal = getSavedTotalAmount();
+        displayTotalAmount(savedTotal);
+        // This array contains the spin_sort where the sort method is located
+        spinSortArray();
+        // Creates NotificationChannel if Android version is Oreo and above. This is required.
+        oreoAndAbove();
+        // Calling the method for adding new items
+        addNewItem();
+        // Calling the method for all the onClickListeners of the MainPage.
+        onClickListeners();
+    }
 
-        // Initialization and finding the variables based on their ID on the xml
+    // Initialization and finding the variables based on their ID on the xml
+    private void initializers() {
         btn_home = (ImageButton) findViewById(R.id.btn_home);
         btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
@@ -86,15 +97,11 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
         // Instantiation the custom adapters
         expenseAdapter = new ExpenseAdapter(MainPage.this, myExpenses);
         historyAdapter = new HistoryAdapter(MainPage.this, myHistoryExpenses);
-        // Loading and displaying data saved from the SharedPreferences
-        loadAndDisplayData();
-        float savedTotal = getSavedTotalAmount();
-        displayTotalAmount(savedTotal);
         // Setting the adapter for the lv_listOfExpenses
         lv_listOfExpenses.setAdapter(expenseAdapter);
+    }
 
-        // Calling the method for adding new items
-        addNewItem();
+    private void onClickListeners() {
 
         // Button for starting the HistoryPage.class
         btn_history.setOnClickListener(new View.OnClickListener() {
@@ -104,12 +111,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 startActivity(i);
             }
         });
-
-        // This array contains the spin_sort where the sort method is located
-        ArrayAdapter<CharSequence> arr = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
-        arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_sort.setAdapter(arr);
-        spin_sort.setOnItemSelectedListener(this);
 
         // Button for starting NewTrackerForm, which adds an item to the lv_listOfExpenses.
         btn_add.setOnClickListener(new View.OnClickListener() {
@@ -239,6 +240,21 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
                 return true;
             }
         });
+    }
+
+    private void oreoAndAbove() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("expense_channel_id", "Expense Notifications", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    // This array contains the spin_sort where the sort method is located
+    private void spinSortArray() {
+        ArrayAdapter<CharSequence> arr = ArrayAdapter.createFromResource(this, R.array.sort, android.R.layout.simple_spinner_item);
+        arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_sort.setAdapter(arr);
+        spin_sort.setOnItemSelectedListener(this);
     }
 
     // Saves the amount of the totalBalance in the SharedPreferences
