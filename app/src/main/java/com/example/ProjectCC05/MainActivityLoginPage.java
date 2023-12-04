@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivityLoginPage extends AppCompatActivity {
-    private Button registerButton;
-    private Button loginButton;
+    private ImageButton forwardbtn;
 
     /*
         This activity is the starting activity of the Application.
@@ -33,26 +33,20 @@ public class MainActivityLoginPage extends AppCompatActivity {
     }
 
     private void initializers() {
-        registerButton = findViewById(R.id.btn_register);
-        loginButton = findViewById(R.id.loginbtn);
+        forwardbtn = findViewById(R.id.forwardbtn);
 
     }
 
     private void onClickListeners() {
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSignUpPage();
-            }
-        });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        forwardbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSignInPage();
             }
         });
     }
+
     private void color() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -60,13 +54,9 @@ public class MainActivityLoginPage extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
         }
     }
+
     public void openSignInPage() {
         Intent intent = new Intent(this, LoginPage.class);
-        startActivity(intent);
-    }
-
-    public void openSignUpPage() {
-        Intent intent = new Intent(this, SignUpPage.class);
         startActivity(intent);
     }
 }
