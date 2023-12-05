@@ -50,7 +50,8 @@ import java.util.Locale;
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
-    ImageButton btn_history, btn_home;
+    Button btn_add;
+    ImageButton btn_history;
     Spinner spin_sort;
     ListView lv_listOfExpenses;
     ExpenseAdapter expenseAdapter;
@@ -94,6 +95,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     // Initialization and finding the variables based on their ID on the xml
     private void initializers() {
         btn_history = findViewById(R.id.btn_history);
+        btn_add = findViewById(R.id.btn_add);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
@@ -127,90 +129,6 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
             public void onClick(View view) {
                 Intent i = new Intent(view.getContext(), NewTrackerForm.class);
                 startActivity(i);
-            }
-        });
-
-        // Button for adding a balance to the total balance
-        btn_addBalance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
-                builder.setTitle("Add Balance");
-
-                // Set up input
-                final EditText input = new EditText(MainPage.this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                builder.setView(input);
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            float enteredBalance = Float.parseFloat(input.getText().toString());
-
-                            // Add the balance to the total amount
-                            float currentTotal = getTotalAmount();
-                            float newTotal = currentTotal + Math.abs(enteredBalance);
-
-                            // Save the new total amount
-                            saveTotalAmount(newTotal);
-                            // Display the updated total
-                            displayTotalAmount(newTotal);
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(MainPage.this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                builder.show();
-            }
-        });
-
-        // Button for subtracting a balance to the total balance
-        btn_subtractBalance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainPage.this);
-                builder.setTitle("Subtract Balance");
-
-                final EditText input = new EditText(MainPage.this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                builder.setView(input);
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            // Get entered amount to subtract
-                            float enteredAmount = Float.parseFloat(input.getText().toString());
-
-                            // Subtract the amount from the total
-                            float currentTotal = getTotalAmount();
-                            /*
-                                Math.abs is used for the absolute amount. If the amount is
-                                negative and the sign for this is -, then the enteredAmount
-                                will add instead of subtract. By using the absolute amount,
-                                it will remove the negative sign and it will be subtracted
-                             */
-                            float newTotal = currentTotal - Math.abs(enteredAmount);
-                            // Save the new total amount
-                            saveTotalAmount(newTotal);
-
-                            // Display the updated total
-                            displayTotalAmount(newTotal);
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(MainPage.this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                builder.show();
-            }
-        });
-
-        // For Opening the MainPage
-        btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMainPage();
             }
         });
 

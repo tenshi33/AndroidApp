@@ -24,6 +24,7 @@ public class RightAlignedSpinnerAdapter extends ArrayAdapter<CharSequence> {
         textView.setGravity(Gravity.RIGHT);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(Color.BLACK);
+        textView.setBackgroundColor(Color.WHITE);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
         return textView;
@@ -36,6 +37,7 @@ public class RightAlignedSpinnerAdapter extends ArrayAdapter<CharSequence> {
         textView.setPadding(82, 35, 8, 8);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(Color.BLACK);
+        textView.setBackgroundColor(Color.WHITE);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         return textView;
     }
