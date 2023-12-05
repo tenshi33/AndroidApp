@@ -60,7 +60,7 @@ public class HistoryAdapter extends BaseAdapter {
 
         tv_amount.setText(String.valueOf(currentHistory.getAmount()));
         if (currentHistory.getAmount() >= 0) {
-            tv_amount.setTextColor(Color.parseColor("#AEF395"));
+            tv_amount.setTextColor(Color.parseColor("#85BB65"));
         } else {
             tv_amount.setTextColor(Color.parseColor("#A91B0D"));
         }

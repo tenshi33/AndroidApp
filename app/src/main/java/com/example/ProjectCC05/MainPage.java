@@ -229,7 +229,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
 
         int color;
         if (amount >= 0) {
-            color = Color.parseColor("#AEF395");
+            color = Color.parseColor("#85BB65");
         } else {
             color = Color.parseColor("#A91B0D");
         }
