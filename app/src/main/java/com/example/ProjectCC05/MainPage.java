@@ -51,7 +51,6 @@ import java.util.Locale;
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
     ImageButton btn_history, btn_home;
-    Button btn_add, btn_addBalance, btn_subtractBalance;
     Spinner spin_sort;
     ListView lv_listOfExpenses;
     ExpenseAdapter expenseAdapter;
@@ -94,11 +93,7 @@ public class MainPage extends AppCompatActivity implements AdapterView.OnItemSel
     }
     // Initialization and finding the variables based on their ID on the xml
     private void initializers() {
-        btn_home = (ImageButton) findViewById(R.id.btn_home);
-        btn_add = findViewById(R.id.btn_add);
         btn_history = findViewById(R.id.btn_history);
-        btn_addBalance = findViewById(R.id.btn_addBalance);
-        btn_subtractBalance = findViewById(R.id.btn_subtractBalance);
         spin_sort = findViewById(R.id.spin_sort);
         tv_totalAmount = findViewById(R.id.tv_totalAmount);
         lv_listOfExpenses = findViewById(R.id.lv_listOfExpenses);
