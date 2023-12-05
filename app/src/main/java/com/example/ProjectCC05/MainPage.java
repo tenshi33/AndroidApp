@@ -50,8 +50,7 @@ import java.util.Locale;
 
 public class MainPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tv_totalAmount;
-    Button btn_add;
-    ImageButton btn_history;
+    ImageButton btn_history,btn_add;
     Spinner spin_sort;
     ListView lv_listOfExpenses;
     ExpenseAdapter expenseAdapter;
