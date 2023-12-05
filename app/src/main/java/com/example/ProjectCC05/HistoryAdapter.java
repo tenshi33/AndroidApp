@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 public class HistoryAdapter extends BaseAdapter {
 
     // The same as ExpenseAdapter. The custom adapter for the History
@@ -63,8 +66,15 @@ public class HistoryAdapter extends BaseAdapter {
         }
 
         History p = this.getItem(position);
+
+        // For setting the decimal format with the currency sign
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setCurrencySymbol("₱");
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##", symbols);
+        String formattedAmount = "₱ " + decimalFormat.format(p.getAmount());
+
         tv_expenseName.setText(p.getExpenseName());
-        tv_amount.setText(Integer.toString((int) p.getAmount()));
+        tv_amount.setText(formattedAmount);
         tv_date.setText(p.getDate());
 
         return oneHistoryLine;
